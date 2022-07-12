@@ -26,7 +26,7 @@ metadata:
   name: istio-ingressgateway
   namespace: istio-system
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: istio-ingressgateway
@@ -117,13 +117,6 @@ spec:
         - containerPort: 15090
           name: http-envoy-prom
           protocol: TCP
-        resources:
-          limits:
-            cpu: 2000m
-            memory: 1024Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
