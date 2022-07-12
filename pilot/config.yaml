@@ -2759,7 +2759,7 @@ metadata:
   name: istiod-1-14-1
   namespace: istio-system
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: istiod
@@ -2850,10 +2850,6 @@ spec:
           initialDelaySeconds: 1
           periodSeconds: 3
           timeoutSeconds: 5
-        resources:
-          requests:
-            cpu: 500m
-            memory: 2048Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
