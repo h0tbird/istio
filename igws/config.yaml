@@ -1,0 +1,243 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-ingressgateway-service-account
+  namespace: istio-system
+  labels:
+    app: istio-ingressgateway
+    istio: ingressgateway
+    release: istio
+    istio.io/rev: 1-14-1
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    heaven.githubapp.com/replace-pods-even-if-unchanged: "false"
+  labels:
+    app: istio-ingressgateway
+    install.operator.istio.io/owning-resource: unknown
+    istio: ingressgateway
+    istio.io/rev: 1-14-1
+    operator.istio.io/component: IngressGateways
+    release: istio
+  name: istio-ingressgateway
+  namespace: istio-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+      istio: ingressgateway
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: gateway
+        prometheus.io/path: /stats/prometheus
+        prometheus.io/port: "15020"
+        prometheus.io/scrape: "true"
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: istio-ingressgateway
+        chart: gateways
+        heritage: Tiller
+        install.operator.istio.io/owning-resource: unknown
+        istio: ingressgateway
+        istio.io/rev: 1-14-1
+        operator.istio.io/component: IngressGateways
+        release: istio
+        sidecar.istio.io/inject: "true"
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - arm64
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - ppc64le
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - s390x
+            weight: 2
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+                - ppc64le
+                - s390x
+      containers:
+      - env:
+        - name: ISTIO_META_UNPRIVILEGED_POD
+          value: "true"
+        image: auto
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - sleep
+              - "5"
+        name: istio-proxy
+        ports:
+        - containerPort: 15021
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        - containerPort: 15090
+          name: http-envoy-prom
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /etc/istio/ingressgateway-certs
+          name: ingressgateway-certs
+          readOnly: true
+        - mountPath: /etc/istio/ingressgateway-ca-certs
+          name: ingressgateway-ca-certs
+          readOnly: true
+      securityContext:
+        fsGroup: 1337
+        runAsGroup: 1337
+        runAsNonRoot: true
+        runAsUser: 1337
+      serviceAccountName: istio-ingressgateway-service-account
+      volumes:
+      - name: ingressgateway-certs
+        secret:
+          optional: true
+          secretName: istio-ingressgateway-certs
+      - name: ingressgateway-ca-certs
+        secret:
+          optional: true
+          secretName: istio-ingressgateway-ca-certs
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: istio-ingressgateway
+  namespace: istio-system
+  labels:
+    app: istio-ingressgateway
+    istio: ingressgateway
+    release: istio
+    istio.io/rev: 1-14-1
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+      istio: ingressgateway
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: istio-ingressgateway-sds
+  namespace: istio-system
+  labels:
+    release: istio
+    istio.io/rev: 1-14-1
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: istio-ingressgateway-sds
+  namespace: istio-system
+  labels:
+    release: istio
+    istio.io/rev: 1-14-1
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: istio-ingressgateway-sds
+subjects:
+- kind: ServiceAccount
+  name: istio-ingressgateway-service-account
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    moda.github.net/domain-name: mesh-ingress-%cluster%.service.%site%.github.net
+    moda.github.net/load-balance-across-clusters: "false"
+    moda.github.net/timeout-connect: "10"
+  labels:
+    app: istio-ingressgateway
+    install.operator.istio.io/owning-resource: unknown
+    istio: ingressgateway
+    istio.io/rev: 1-14-1
+    operator.istio.io/component: IngressGateways
+    release: istio
+  name: istio-ingressgateway
+  namespace: istio-system
+spec:
+  ports:
+  - name: status-port
+    port: 15021
+    protocol: TCP
+    targetPort: 15021
+  - name: http2
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 8443
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+  type: LoadBalancer
+---
