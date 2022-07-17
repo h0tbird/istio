@@ -1,0 +1,34 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  profile: default
+  hub: ghcr.io/resf/istio
+  components:
+    pilot:
+      enabled: true
+      k8s:
+        replicaCount: 2
+        overlays:
+        - apiVersion: apps/v1
+          kind: Deployment
+          name: istiod
+          patches:
+          - path: metadata.annotations
+            value:
+              heaven.githubapp.com/replace-pods-even-if-unchanged: "false"
+          - path: spec.template.spec.containers[0].lifecycle
+            value:
+              preStop:
+                exec:
+                  command: ["sleep", "5"]
+  meshConfig:
+    accessLogFile: /dev/stdout
+    accessLogEncoding: JSON
+  values:
+    istio_cni:
+      enabled: true
+    pilot:
+      autoscaleEnabled: false
+    global:
+      meshID: "octomesh"
+      logAsJson: true

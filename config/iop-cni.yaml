@@ -1,0 +1,23 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  profile: default
+  hub: ghcr.io/resf/istio
+  components:
+    cni:
+      enabled: true
+      k8s:
+        overlays:
+        - apiVersion: apps/v1
+          kind: DaemonSet
+          name: istio-cni-node
+          patches:
+          - path: metadata.annotations
+            value:
+              heaven.githubapp.com/replace-pods-even-if-unchanged: "false"
+  values:
+    cni:
+      pullPolicy: IfNotPresent
+      excludeNamespaces:
+      - istio-system
+      - kube-system

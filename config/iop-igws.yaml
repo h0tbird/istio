@@ -1,0 +1,33 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  profile: default
+  hub: ghcr.io/resf/istio
+  components:
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        replicaCount: 2
+        serviceAnnotations:
+          moda.github.net/domain-name: "mesh-ingress-%cluster%.service.%site%.github.net"
+          moda.github.net/load-balance-across-clusters: "false"
+          moda.github.net/timeout-connect: "10"
+        overlays:
+        - apiVersion: apps/v1
+          kind: Deployment
+          name: istio-ingressgateway
+          patches:
+          - path: metadata.annotations
+            value:
+              heaven.githubapp.com/replace-pods-even-if-unchanged: "false"
+          - path: spec.template.spec.containers[0].lifecycle
+            value:
+              preStop:
+                exec:
+                  command: ["sleep", "5"]
+  values:
+    gateways:
+      istio-ingressgateway:
+        autoscaleEnabled: false
+        injectionTemplate: gateway
