@@ -2747,8 +2747,6 @@ webhooks:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    heaven.githubapp.com/replace-pods-even-if-unchanged: "false"
   labels:
     app: istiod
     install.operator.istio.io/owning-resource: unknown

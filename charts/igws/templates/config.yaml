@@ -14,8 +14,6 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    heaven.githubapp.com/replace-pods-even-if-unchanged: "false"
   labels:
     app: istio-ingressgateway
     install.operator.istio.io/owning-resource: unknown
@@ -202,35 +200,35 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    moda.github.net/domain-name: mesh-ingress-%cluster%.service.%site%.github.net
-    moda.github.net/load-balance-across-clusters: "false"
-    moda.github.net/timeout-connect: "10"
-  labels:
-    app: istio-ingressgateway
-    install.operator.istio.io/owning-resource: unknown
-    istio: ingressgateway
-    istio.io/rev: 1-14-1
-    operator.istio.io/component: IngressGateways
-    release: istio
   name: istio-ingressgateway
   namespace: istio-system
+  annotations:
+  labels:
+    app: istio-ingressgateway
+    istio: ingressgateway
+    release: istio
+    istio.io/rev: 1-14-1
+    install.operator.istio.io/owning-resource: unknown
+    operator.istio.io/component: "IngressGateways"
 spec:
-  ports:
-  - name: status-port
-    port: 15021
-    protocol: TCP
-    targetPort: 15021
-  - name: http2
-    port: 80
-    protocol: TCP
-    targetPort: 8080
-  - name: https
-    port: 443
-    protocol: TCP
-    targetPort: 8443
+  type: LoadBalancer
   selector:
     app: istio-ingressgateway
     istio: ingressgateway
-  type: LoadBalancer
+  ports:
+    -
+      name: status-port
+      port: 15021
+      protocol: TCP
+      targetPort: 15021
+    -
+      name: http2
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    -
+      name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8443
 ---
