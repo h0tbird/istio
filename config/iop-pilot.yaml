@@ -7,15 +7,12 @@ spec:
     pilot:
       enabled: true
       k8s:
-        replicaCount: 2
+        replicaCount: 1
         overlays:
         - apiVersion: apps/v1
           kind: Deployment
           name: istiod
           patches:
-          - path: metadata.annotations
-            value:
-              heaven.githubapp.com/replace-pods-even-if-unchanged: "false"
           - path: spec.template.spec.containers[0].lifecycle
             value:
               preStop:
