@@ -1638,7 +1638,7 @@ data:
   # New fields should not use Values - it is a 'primary' config object, users should be able
   # to fine tune it or use it with kube-inject.
   config: |-
-    # defaultTemplates defines the default template to use for pods that do not explicitly specify a template
+    {{`# defaultTemplates defines the default template to use for pods that do not explicitly specify a template
     defaultTemplates: [sidecar]
     policy: enabled
     alwaysInjectSelector:
@@ -1650,23 +1650,23 @@ data:
     templates:
       sidecar: |
         {{- define "resources"  }}
-          {{- if or (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPU`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemory`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPULimit`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemoryLimit`) }}
-            {{- if or (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPU`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemory`) }}
+          {{- if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPU{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemory{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPULimit{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemoryLimit{{ printf "\x60" }}) }}
+            {{- if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPU{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemory{{ printf "\x60" }}) }}
               requests:
-                {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPU`) -}}
-                cpu: "{{ index .ObjectMeta.Annotations `sidecar.istio.io/proxyCPU` }}"
+                {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPU{{ printf "\x60" }}) -}}
+                cpu: "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPU{{ printf "\x60" }} }}"
                 {{ end }}
-                {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemory`) -}}
-                memory: "{{ index .ObjectMeta.Annotations `sidecar.istio.io/proxyMemory` }}"
+                {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemory{{ printf "\x60" }}) -}}
+                memory: "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemory{{ printf "\x60" }} }}"
                 {{ end }}
             {{- end }}
-            {{- if or (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPULimit`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemoryLimit`) }}
+            {{- if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPULimit{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemoryLimit{{ printf "\x60" }}) }}
               limits:
-                {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPULimit`) -}}
-                cpu: "{{ index .ObjectMeta.Annotations `sidecar.istio.io/proxyCPULimit` }}"
+                {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPULimit{{ printf "\x60" }}) -}}
+                cpu: "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPULimit{{ printf "\x60" }} }}"
                 {{ end }}
-                {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemoryLimit`) -}}
-                memory: "{{ index .ObjectMeta.Annotations `sidecar.istio.io/proxyMemoryLimit` }}"
+                {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemoryLimit{{ printf "\x60" }}) -}}
+                memory: "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemoryLimit{{ printf "\x60" }} }}"
                 {{ end }}
             {{- end }}
           {{- else }}
@@ -1679,47 +1679,47 @@ data:
         {{- range $index, $container := .Spec.Containers }}{{ if not (eq $container.Name "istio-proxy") }}{{ $containers = append $containers $container.Name }}{{end}}{{- end}}
         metadata:
           labels:
-            security.istio.io/tlsMode: {{ index .ObjectMeta.Labels `security.istio.io/tlsMode` | default "istio"  | quote }}
-            service.istio.io/canonical-name: {{ index .ObjectMeta.Labels `service.istio.io/canonical-name` | default (index .ObjectMeta.Labels `app.kubernetes.io/name`) | default (index .ObjectMeta.Labels `app`) | default .DeploymentMeta.Name  | quote }}
-            service.istio.io/canonical-revision: {{ index .ObjectMeta.Labels `service.istio.io/canonical-revision` | default (index .ObjectMeta.Labels `app.kubernetes.io/version`) | default (index .ObjectMeta.Labels `version`) | default "latest"  | quote }}
+            security.istio.io/tlsMode: {{ index .ObjectMeta.Labels {{ printf "\x60" }}security.istio.io/tlsMode{{ printf "\x60" }} | default "istio"  | quote }}
+            service.istio.io/canonical-name: {{ index .ObjectMeta.Labels {{ printf "\x60" }}service.istio.io/canonical-name{{ printf "\x60" }} | default (index .ObjectMeta.Labels {{ printf "\x60" }}app.kubernetes.io/name{{ printf "\x60" }}) | default (index .ObjectMeta.Labels {{ printf "\x60" }}app{{ printf "\x60" }}) | default .DeploymentMeta.Name  | quote }}
+            service.istio.io/canonical-revision: {{ index .ObjectMeta.Labels {{ printf "\x60" }}service.istio.io/canonical-revision{{ printf "\x60" }} | default (index .ObjectMeta.Labels {{ printf "\x60" }}app.kubernetes.io/version{{ printf "\x60" }}) | default (index .ObjectMeta.Labels {{ printf "\x60" }}version{{ printf "\x60" }}) | default "latest"  | quote }}
           annotations: {
             {{- if ge (len $containers) 1 }}
-            {{- if not (isset .ObjectMeta.Annotations `kubectl.kubernetes.io/default-logs-container`) }}
+            {{- if not (isset .ObjectMeta.Annotations {{ printf "\x60" }}kubectl.kubernetes.io/default-logs-container{{ printf "\x60" }}) }}
             kubectl.kubernetes.io/default-logs-container: "{{ index $containers 0 }}",
             {{- end }}
-            {{- if not (isset .ObjectMeta.Annotations `kubectl.kubernetes.io/default-container`) }}
+            {{- if not (isset .ObjectMeta.Annotations {{ printf "\x60" }}kubectl.kubernetes.io/default-container{{ printf "\x60" }}) }}
             kubectl.kubernetes.io/default-container: "{{ index $containers 0 }}",
             {{- end }}
             {{- end }}
         {{- if .Values.istio_cni.enabled }}
             {{- if not .Values.istio_cni.chained }}
-            k8s.v1.cni.cncf.io/networks: '{{ appendMultusNetwork (index .ObjectMeta.Annotations `k8s.v1.cni.cncf.io/networks`) `istio-cni` }}',
+            k8s.v1.cni.cncf.io/networks: '{{ appendMultusNetwork (index .ObjectMeta.Annotations {{ printf "\x60" }}k8s.v1.cni.cncf.io/networks{{ printf "\x60" }}) {{ printf "\x60" }}istio-cni{{ printf "\x60" }} }}',
             {{- end }}
-            sidecar.istio.io/interceptionMode: "{{ annotation .ObjectMeta `sidecar.istio.io/interceptionMode` .ProxyConfig.InterceptionMode }}",
-            {{ with annotation .ObjectMeta `traffic.sidecar.istio.io/includeOutboundIPRanges` .Values.global.proxy.includeIPRanges }}traffic.sidecar.istio.io/includeOutboundIPRanges: "{{.}}",{{ end }}
-            {{ with annotation .ObjectMeta `traffic.sidecar.istio.io/excludeOutboundIPRanges` .Values.global.proxy.excludeIPRanges }}traffic.sidecar.istio.io/excludeOutboundIPRanges: "{{.}}",{{ end }}
-            {{ with annotation .ObjectMeta `traffic.sidecar.istio.io/includeInboundPorts` .Values.global.proxy.includeInboundPorts }}traffic.sidecar.istio.io/includeInboundPorts: "{{.}}",{{ end }}
-            traffic.sidecar.istio.io/excludeInboundPorts: "{{ excludeInboundPort (annotation .ObjectMeta `status.sidecar.istio.io/port` .Values.global.proxy.statusPort) (annotation .ObjectMeta `traffic.sidecar.istio.io/excludeInboundPorts` .Values.global.proxy.excludeInboundPorts) }}",
-            {{ if or (isset .ObjectMeta.Annotations `traffic.sidecar.istio.io/includeOutboundPorts`) (ne (valueOrDefault .Values.global.proxy.includeOutboundPorts "") "") }}
-            traffic.sidecar.istio.io/includeOutboundPorts: "{{ annotation .ObjectMeta `traffic.sidecar.istio.io/includeOutboundPorts` .Values.global.proxy.includeOutboundPorts }}",
+            sidecar.istio.io/interceptionMode: "{{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/interceptionMode{{ printf "\x60" }} .ProxyConfig.InterceptionMode }}",
+            {{ with annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/includeOutboundIPRanges{{ printf "\x60" }} .Values.global.proxy.includeIPRanges }}traffic.sidecar.istio.io/includeOutboundIPRanges: "{{.}}",{{ end }}
+            {{ with annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/excludeOutboundIPRanges{{ printf "\x60" }} .Values.global.proxy.excludeIPRanges }}traffic.sidecar.istio.io/excludeOutboundIPRanges: "{{.}}",{{ end }}
+            {{ with annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/includeInboundPorts{{ printf "\x60" }} .Values.global.proxy.includeInboundPorts }}traffic.sidecar.istio.io/includeInboundPorts: "{{.}}",{{ end }}
+            traffic.sidecar.istio.io/excludeInboundPorts: "{{ excludeInboundPort (annotation .ObjectMeta {{ printf "\x60" }}status.sidecar.istio.io/port{{ printf "\x60" }} .Values.global.proxy.statusPort) (annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/excludeInboundPorts{{ printf "\x60" }} .Values.global.proxy.excludeInboundPorts) }}",
+            {{ if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}traffic.sidecar.istio.io/includeOutboundPorts{{ printf "\x60" }}) (ne (valueOrDefault .Values.global.proxy.includeOutboundPorts "") "") }}
+            traffic.sidecar.istio.io/includeOutboundPorts: "{{ annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/includeOutboundPorts{{ printf "\x60" }} .Values.global.proxy.includeOutboundPorts }}",
             {{- end }}
-            {{ if or (isset .ObjectMeta.Annotations `traffic.sidecar.istio.io/excludeOutboundPorts`) (ne .Values.global.proxy.excludeOutboundPorts "") }}
-            traffic.sidecar.istio.io/excludeOutboundPorts: "{{ annotation .ObjectMeta `traffic.sidecar.istio.io/excludeOutboundPorts` .Values.global.proxy.excludeOutboundPorts }}",
+            {{ if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}traffic.sidecar.istio.io/excludeOutboundPorts{{ printf "\x60" }}) (ne .Values.global.proxy.excludeOutboundPorts "") }}
+            traffic.sidecar.istio.io/excludeOutboundPorts: "{{ annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/excludeOutboundPorts{{ printf "\x60" }} .Values.global.proxy.excludeOutboundPorts }}",
             {{- end }}
-            {{ with index .ObjectMeta.Annotations `traffic.sidecar.istio.io/kubevirtInterfaces` }}traffic.sidecar.istio.io/kubevirtInterfaces: "{{.}}",{{ end }}
+            {{ with index .ObjectMeta.Annotations {{ printf "\x60" }}traffic.sidecar.istio.io/kubevirtInterfaces{{ printf "\x60" }} }}traffic.sidecar.istio.io/kubevirtInterfaces: "{{.}}",{{ end }}
         {{- end }}
           }
         spec:
           {{- $holdProxy := or .ProxyConfig.HoldApplicationUntilProxyStarts.GetValue .Values.global.proxy.holdApplicationUntilProxyStarts }}
           initContainers:
-          {{ if ne (annotation .ObjectMeta `sidecar.istio.io/interceptionMode` .ProxyConfig.InterceptionMode) `NONE` }}
+          {{ if ne (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/interceptionMode{{ printf "\x60" }} .ProxyConfig.InterceptionMode) {{ printf "\x60" }}NONE{{ printf "\x60" }} }}
           {{ if .Values.istio_cni.enabled -}}
           - name: istio-validation
           {{ else -}}
           - name: istio-init
           {{ end -}}
-          {{- if contains "/" (annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy_init.image) }}
-            image: "{{ annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy_init.image }}"
+          {{- if contains "/" (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy_init.image) }}
+            image: "{{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy_init.image }}"
           {{- else }}
             image: "{{ .ProxyImage }}"
           {{- end }}
@@ -1732,30 +1732,30 @@ data:
             - "-u"
             - "1337"
             - "-m"
-            - "{{ annotation .ObjectMeta `sidecar.istio.io/interceptionMode` .ProxyConfig.InterceptionMode }}"
+            - "{{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/interceptionMode{{ printf "\x60" }} .ProxyConfig.InterceptionMode }}"
             - "-i"
-            - "{{ annotation .ObjectMeta `traffic.sidecar.istio.io/includeOutboundIPRanges` .Values.global.proxy.includeIPRanges }}"
+            - "{{ annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/includeOutboundIPRanges{{ printf "\x60" }} .Values.global.proxy.includeIPRanges }}"
             - "-x"
-            - "{{ annotation .ObjectMeta `traffic.sidecar.istio.io/excludeOutboundIPRanges` .Values.global.proxy.excludeIPRanges }}"
+            - "{{ annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/excludeOutboundIPRanges{{ printf "\x60" }} .Values.global.proxy.excludeIPRanges }}"
             - "-b"
-            - "{{ annotation .ObjectMeta `traffic.sidecar.istio.io/includeInboundPorts` .Values.global.proxy.includeInboundPorts }}"
+            - "{{ annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/includeInboundPorts{{ printf "\x60" }} .Values.global.proxy.includeInboundPorts }}"
             - "-d"
-          {{- if excludeInboundPort (annotation .ObjectMeta `status.sidecar.istio.io/port` .Values.global.proxy.statusPort) (annotation .ObjectMeta `traffic.sidecar.istio.io/excludeInboundPorts` .Values.global.proxy.excludeInboundPorts) }}
-            - "15090,15021,{{ excludeInboundPort (annotation .ObjectMeta `status.sidecar.istio.io/port` .Values.global.proxy.statusPort) (annotation .ObjectMeta `traffic.sidecar.istio.io/excludeInboundPorts` .Values.global.proxy.excludeInboundPorts) }}"
+          {{- if excludeInboundPort (annotation .ObjectMeta {{ printf "\x60" }}status.sidecar.istio.io/port{{ printf "\x60" }} .Values.global.proxy.statusPort) (annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/excludeInboundPorts{{ printf "\x60" }} .Values.global.proxy.excludeInboundPorts) }}
+            - "15090,15021,{{ excludeInboundPort (annotation .ObjectMeta {{ printf "\x60" }}status.sidecar.istio.io/port{{ printf "\x60" }} .Values.global.proxy.statusPort) (annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/excludeInboundPorts{{ printf "\x60" }} .Values.global.proxy.excludeInboundPorts) }}"
           {{- else }}
             - "15090,15021"
           {{- end }}
-            {{ if or (isset .ObjectMeta.Annotations `traffic.sidecar.istio.io/includeOutboundPorts`) (ne (valueOrDefault .Values.global.proxy.includeOutboundPorts "") "") -}}
+            {{ if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}traffic.sidecar.istio.io/includeOutboundPorts{{ printf "\x60" }}) (ne (valueOrDefault .Values.global.proxy.includeOutboundPorts "") "") -}}
             - "-q"
-            - "{{ annotation .ObjectMeta `traffic.sidecar.istio.io/includeOutboundPorts` .Values.global.proxy.includeOutboundPorts }}"
+            - "{{ annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/includeOutboundPorts{{ printf "\x60" }} .Values.global.proxy.includeOutboundPorts }}"
             {{ end -}}
-            {{ if or (isset .ObjectMeta.Annotations `traffic.sidecar.istio.io/excludeOutboundPorts`) (ne (valueOrDefault .Values.global.proxy.excludeOutboundPorts "") "") -}}
+            {{ if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}traffic.sidecar.istio.io/excludeOutboundPorts{{ printf "\x60" }}) (ne (valueOrDefault .Values.global.proxy.excludeOutboundPorts "") "") -}}
             - "-o"
-            - "{{ annotation .ObjectMeta `traffic.sidecar.istio.io/excludeOutboundPorts` .Values.global.proxy.excludeOutboundPorts }}"
+            - "{{ annotation .ObjectMeta {{ printf "\x60" }}traffic.sidecar.istio.io/excludeOutboundPorts{{ printf "\x60" }} .Values.global.proxy.excludeOutboundPorts }}"
             {{ end -}}
-            {{ if (isset .ObjectMeta.Annotations `traffic.sidecar.istio.io/kubevirtInterfaces`) -}}
+            {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}traffic.sidecar.istio.io/kubevirtInterfaces{{ printf "\x60" }}) -}}
             - "-k"
-            - "{{ index .ObjectMeta.Annotations `traffic.sidecar.istio.io/kubevirtInterfaces` }}"
+            - "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}traffic.sidecar.istio.io/kubevirtInterfaces{{ printf "\x60" }} }}"
             {{ end -}}
             {{ if .Values.istio_cni.enabled -}}
             - "--run-validation"
@@ -1795,15 +1795,15 @@ data:
             {{- end }}
             restartPolicy: Always
           {{ end -}}
-          {{- if eq (annotation .ObjectMeta `sidecar.istio.io/enableCoreDump` .Values.global.proxy.enableCoreDump) "true" }}
+          {{- if eq (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/enableCoreDump{{ printf "\x60" }} .Values.global.proxy.enableCoreDump) "true" }}
           - name: enable-core-dump
             args:
             - -c
             - sysctl -w kernel.core_pattern=/var/lib/istio/data/core.proxy && ulimit -c unlimited
             command:
               - /bin/sh
-          {{- if contains "/" (annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy_init.image) }}
-            image: "{{ annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy_init.image }}"
+          {{- if contains "/" (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy_init.image) }}
+            image: "{{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy_init.image }}"
           {{- else }}
             image: "{{ .ProxyImage }}"
           {{- end }}
@@ -1825,8 +1825,8 @@ data:
           {{ end }}
           containers:
           - name: istio-proxy
-          {{- if contains "/" (annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy.image) }}
-            image: "{{ annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy.image }}"
+          {{- if contains "/" (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy.image) }}
+            image: "{{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy.image }}"
           {{- else }}
             image: "{{ .ProxyImage }}"
           {{- end }}
@@ -1839,9 +1839,9 @@ data:
             - sidecar
             - --domain
             - $(POD_NAMESPACE).svc.{{ .Values.global.proxy.clusterDomain }}
-            - --proxyLogLevel={{ annotation .ObjectMeta `sidecar.istio.io/logLevel` .Values.global.proxy.logLevel }}
-            - --proxyComponentLogLevel={{ annotation .ObjectMeta `sidecar.istio.io/componentLogLevel` .Values.global.proxy.componentLogLevel }}
-            - --log_output_level={{ annotation .ObjectMeta `sidecar.istio.io/agentLogLevel` .Values.global.logging.level }}
+            - --proxyLogLevel={{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/logLevel{{ printf "\x60" }} .Values.global.proxy.logLevel }}
+            - --proxyComponentLogLevel={{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/componentLogLevel{{ printf "\x60" }} .Values.global.proxy.componentLogLevel }}
+            - --log_output_level={{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/agentLogLevel{{ printf "\x60" }} .Values.global.logging.level }}
           {{- if .Values.global.sts.servicePort }}
             - --stsPort={{ .Values.global.sts.servicePort }}
           {{- end }}
@@ -1917,9 +1917,9 @@ data:
             - name: ISTIO_META_APP_CONTAINERS
               value: "{{ $containers | join "," }}"
             - name: ISTIO_META_CLUSTER_ID
-              value: "{{ valueOrDefault .Values.global.multiCluster.clusterName `Kubernetes` }}"
+              value: "{{ valueOrDefault .Values.global.multiCluster.clusterName {{ printf "\x60" }}Kubernetes{{ printf "\x60" }} }}"
             - name: ISTIO_META_INTERCEPTION_MODE
-              value: "{{ or (index .ObjectMeta.Annotations `sidecar.istio.io/interceptionMode`) .ProxyConfig.InterceptionMode.String }}"
+              value: "{{ or (index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/interceptionMode{{ printf "\x60" }}) .ProxyConfig.InterceptionMode.String }}"
             {{- if .Values.global.network }}
             - name: ISTIO_META_NETWORK
               value: "{{ .Values.global.network }}"
@@ -1930,9 +1930,9 @@ data:
             {{ end }}
             {{- if and .TypeMeta.APIVersion .DeploymentMeta.Name }}
             - name: ISTIO_META_OWNER
-              value: kubernetes://apis/{{ .TypeMeta.APIVersion }}/namespaces/{{ valueOrDefault .DeploymentMeta.Namespace `default` }}/{{ toLower .TypeMeta.Kind}}s/{{ .DeploymentMeta.Name }}
+              value: kubernetes://apis/{{ .TypeMeta.APIVersion }}/namespaces/{{ valueOrDefault .DeploymentMeta.Namespace {{ printf "\x60" }}default{{ printf "\x60" }} }}/{{ toLower .TypeMeta.Kind}}s/{{ .DeploymentMeta.Name }}
             {{- end}}
-            {{- if (isset .ObjectMeta.Annotations `sidecar.istio.io/bootstrapOverride`) }}
+            {{- if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/bootstrapOverride{{ printf "\x60" }}) }}
             - name: ISTIO_BOOTSTRAP_OVERRIDE
               value: "/etc/istio/custom-bootstrap/custom_bootstrap.json"
             {{- end }}
@@ -1947,8 +1947,8 @@ data:
             - name: TRUST_DOMAIN
               value: "{{ . }}"
             {{- end }}
-            {{- if and (eq .Values.global.proxy.tracer "datadog") (isset .ObjectMeta.Annotations `apm.datadoghq.com/env`) }}
-            {{- range $key, $value := fromJSON (index .ObjectMeta.Annotations `apm.datadoghq.com/env`) }}
+            {{- if and (eq .Values.global.proxy.tracer "datadog") (isset .ObjectMeta.Annotations {{ printf "\x60" }}apm.datadoghq.com/env{{ printf "\x60" }}) }}
+            {{- range $key, $value := fromJSON (index .ObjectMeta.Annotations {{ printf "\x60" }}apm.datadoghq.com/env{{ printf "\x60" }}) }}
             - name: {{ $key }}
               value: "{{ $value }}"
             {{- end }}
@@ -1958,15 +1958,15 @@ data:
               value: "{{ $value }}"
             {{- end }}
             {{with .Values.global.imagePullPolicy }}imagePullPolicy: "{{.}}"{{end}}
-            {{ if ne (annotation .ObjectMeta `status.sidecar.istio.io/port` .Values.global.proxy.statusPort) `0` }}
+            {{ if ne (annotation .ObjectMeta {{ printf "\x60" }}status.sidecar.istio.io/port{{ printf "\x60" }} .Values.global.proxy.statusPort) {{ printf "\x60" }}0{{ printf "\x60" }} }}
             readinessProbe:
               httpGet:
                 path: /healthz/ready
                 port: 15021
-              initialDelaySeconds: {{ annotation .ObjectMeta `readiness.status.sidecar.istio.io/initialDelaySeconds` .Values.global.proxy.readinessInitialDelaySeconds }}
-              periodSeconds: {{ annotation .ObjectMeta `readiness.status.sidecar.istio.io/periodSeconds` .Values.global.proxy.readinessPeriodSeconds }}
+              initialDelaySeconds: {{ annotation .ObjectMeta {{ printf "\x60" }}readiness.status.sidecar.istio.io/initialDelaySeconds{{ printf "\x60" }} .Values.global.proxy.readinessInitialDelaySeconds }}
+              periodSeconds: {{ annotation .ObjectMeta {{ printf "\x60" }}readiness.status.sidecar.istio.io/periodSeconds{{ printf "\x60" }} .Values.global.proxy.readinessPeriodSeconds }}
               timeoutSeconds: 3
-              failureThreshold: {{ annotation .ObjectMeta `readiness.status.sidecar.istio.io/failureThreshold` .Values.global.proxy.readinessFailureThreshold }}
+              failureThreshold: {{ annotation .ObjectMeta {{ printf "\x60" }}readiness.status.sidecar.istio.io/failureThreshold{{ printf "\x60" }} .Values.global.proxy.readinessFailureThreshold }}
             {{ end -}}
             securityContext:
               {{- if eq (index .ProxyConfig.ProxyMetadata "IPTABLES_TRACE_LOGGING") "true" }}
@@ -1977,7 +1977,7 @@ data:
                 drop:
                 - ALL
               privileged: true
-              readOnlyRootFilesystem: {{ ne (annotation .ObjectMeta `sidecar.istio.io/enableCoreDump` .Values.global.proxy.enableCoreDump) "true" }}
+              readOnlyRootFilesystem: {{ ne (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/enableCoreDump{{ printf "\x60" }} .Values.global.proxy.enableCoreDump) "true" }}
               runAsGroup: 1337
               fsGroup: 1337
               runAsNonRoot: false
@@ -1985,22 +1985,22 @@ data:
               {{- else }}
               allowPrivilegeEscalation: {{ .Values.global.proxy.privileged }}
               capabilities:
-                {{ if or (eq (annotation .ObjectMeta `sidecar.istio.io/interceptionMode` .ProxyConfig.InterceptionMode) `TPROXY`) (eq (annotation .ObjectMeta `sidecar.istio.io/capNetBindService` .Values.global.proxy.capNetBindService) `true`) -}}
+                {{ if or (eq (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/interceptionMode{{ printf "\x60" }} .ProxyConfig.InterceptionMode) {{ printf "\x60" }}TPROXY{{ printf "\x60" }}) (eq (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/capNetBindService{{ printf "\x60" }} .Values.global.proxy.capNetBindService) {{ printf "\x60" }}true{{ printf "\x60" }}) -}}
                 add:
-                {{ if eq (annotation .ObjectMeta `sidecar.istio.io/interceptionMode` .ProxyConfig.InterceptionMode) `TPROXY` -}}
+                {{ if eq (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/interceptionMode{{ printf "\x60" }} .ProxyConfig.InterceptionMode) {{ printf "\x60" }}TPROXY{{ printf "\x60" }} -}}
                 - NET_ADMIN
                 {{- end }}
-                {{ if eq (annotation .ObjectMeta `sidecar.istio.io/capNetBindService` .Values.global.proxy.capNetBindService) `true` -}}
+                {{ if eq (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/capNetBindService{{ printf "\x60" }} .Values.global.proxy.capNetBindService) {{ printf "\x60" }}true{{ printf "\x60" }} -}}
                 - NET_BIND_SERVICE
                 {{- end }}
                 {{- end }}
                 drop:
                 - ALL
               privileged: {{ .Values.global.proxy.privileged }}
-              readOnlyRootFilesystem: {{ ne (annotation .ObjectMeta `sidecar.istio.io/enableCoreDump` .Values.global.proxy.enableCoreDump) "true" }}
+              readOnlyRootFilesystem: {{ ne (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/enableCoreDump{{ printf "\x60" }} .Values.global.proxy.enableCoreDump) "true" }}
               runAsGroup: 1337
               fsGroup: 1337
-              {{ if or (eq (annotation .ObjectMeta `sidecar.istio.io/interceptionMode` .ProxyConfig.InterceptionMode) `TPROXY`) (eq (annotation .ObjectMeta `sidecar.istio.io/capNetBindService` .Values.global.proxy.capNetBindService) `true`) -}}
+              {{ if or (eq (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/interceptionMode{{ printf "\x60" }} .ProxyConfig.InterceptionMode) {{ printf "\x60" }}TPROXY{{ printf "\x60" }}) (eq (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/capNetBindService{{ printf "\x60" }} .Values.global.proxy.capNetBindService) {{ printf "\x60" }}true{{ printf "\x60" }}) -}}
               runAsNonRoot: false
               runAsUser: 0
               {{- else -}}
@@ -2027,7 +2027,7 @@ data:
             {{- end }}
             - mountPath: /var/lib/istio/data
               name: istio-data
-            {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/bootstrapOverride`) }}
+            {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/bootstrapOverride{{ printf "\x60" }}) }}
             - mountPath: /etc/istio/custom-bootstrap
               name: custom-bootstrap-volume
             {{- end }}
@@ -2051,8 +2051,8 @@ data:
               name: lightstep-certs
               readOnly: true
             {{- end }}
-              {{- if isset .ObjectMeta.Annotations `sidecar.istio.io/userVolumeMount` }}
-              {{ range $index, $value := fromJSON (index .ObjectMeta.Annotations `sidecar.istio.io/userVolumeMount`) }}
+              {{- if isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/userVolumeMount{{ printf "\x60" }} }}
+              {{ range $index, $value := fromJSON (index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/userVolumeMount{{ printf "\x60" }}) }}
             - name: "{{  $index }}"
               {{ toYaml $value | indent 6 }}
               {{ end }}
@@ -2068,10 +2068,10 @@ data:
           - emptyDir:
             name: workload-certs
           {{- end }}
-          {{- if (isset .ObjectMeta.Annotations `sidecar.istio.io/bootstrapOverride`) }}
+          {{- if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/bootstrapOverride{{ printf "\x60" }}) }}
           - name: custom-bootstrap-volume
             configMap:
-              name: {{ annotation .ObjectMeta `sidecar.istio.io/bootstrapOverride` "" }}
+              name: {{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/bootstrapOverride{{ printf "\x60" }} "" }}
           {{- end }}
           # SDS channel between istioagent and Envoy
           - emptyDir:
@@ -2113,8 +2113,8 @@ data:
               secretName: {{  printf "istio.%s" .Spec.ServiceAccountName }}
               {{  end -}}
           {{- end }}
-            {{- if isset .ObjectMeta.Annotations `sidecar.istio.io/userVolume` }}
-            {{range $index, $value := fromJSON (index .ObjectMeta.Annotations `sidecar.istio.io/userVolume`) }}
+            {{- if isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/userVolume{{ printf "\x60" }} }}
+            {{range $index, $value := fromJSON (index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/userVolume{{ printf "\x60" }}) }}
           - name: "{{ $index }}"
             {{ toYaml $value | indent 4 }}
             {{ end }}
@@ -2140,8 +2140,8 @@ data:
         {{- range $index, $container := .Spec.Containers }}{{ if not (eq $container.Name "istio-proxy") }}{{ $containers = append $containers $container.Name }}{{end}}{{- end}}
         metadata:
           labels:
-            service.istio.io/canonical-name: {{ index .ObjectMeta.Labels `service.istio.io/canonical-name` | default (index .ObjectMeta.Labels `app.kubernetes.io/name`) | default (index .ObjectMeta.Labels `app`) | default .DeploymentMeta.Name  | quote }}
-            service.istio.io/canonical-revision: {{ index .ObjectMeta.Labels `service.istio.io/canonical-revision` | default (index .ObjectMeta.Labels `app.kubernetes.io/version`) | default (index .ObjectMeta.Labels `version`) | default "latest"  | quote }}
+            service.istio.io/canonical-name: {{ index .ObjectMeta.Labels {{ printf "\x60" }}service.istio.io/canonical-name{{ printf "\x60" }} | default (index .ObjectMeta.Labels {{ printf "\x60" }}app.kubernetes.io/name{{ printf "\x60" }}) | default (index .ObjectMeta.Labels {{ printf "\x60" }}app{{ printf "\x60" }}) | default .DeploymentMeta.Name  | quote }}
+            service.istio.io/canonical-revision: {{ index .ObjectMeta.Labels {{ printf "\x60" }}service.istio.io/canonical-revision{{ printf "\x60" }} | default (index .ObjectMeta.Labels {{ printf "\x60" }}app.kubernetes.io/version{{ printf "\x60" }}) | default (index .ObjectMeta.Labels {{ printf "\x60" }}version{{ printf "\x60" }}) | default "latest"  | quote }}
             istio.io/rev: {{ .Revision | default "default" | quote }}
           annotations: {
             {{- if eq (len $containers) 1 }}
@@ -2153,7 +2153,7 @@ data:
           containers:
           - name: istio-proxy
           {{- if contains "/" .Values.global.proxy.image }}
-            image: "{{ annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy.image }}"
+            image: "{{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy.image }}"
           {{- else }}
             image: "{{ .ProxyImage }}"
           {{- end }}
@@ -2166,9 +2166,9 @@ data:
             - router
             - --domain
             - $(POD_NAMESPACE).svc.{{ .Values.global.proxy.clusterDomain }}
-            - --proxyLogLevel={{ annotation .ObjectMeta `sidecar.istio.io/logLevel` .Values.global.proxy.logLevel }}
-            - --proxyComponentLogLevel={{ annotation .ObjectMeta `sidecar.istio.io/componentLogLevel` .Values.global.proxy.componentLogLevel }}
-            - --log_output_level={{ annotation .ObjectMeta `sidecar.istio.io/agentLogLevel` .Values.global.logging.level }}
+            - --proxyLogLevel={{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/logLevel{{ printf "\x60" }} .Values.global.proxy.logLevel }}
+            - --proxyComponentLogLevel={{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/componentLogLevel{{ printf "\x60" }} .Values.global.proxy.componentLogLevel }}
+            - --log_output_level={{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/agentLogLevel{{ printf "\x60" }} .Values.global.logging.level }}
           {{- if .Values.global.sts.servicePort }}
             - --stsPort={{ .Values.global.sts.servicePort }}
           {{- end }}
@@ -2229,7 +2229,7 @@ data:
             - name: ISTIO_META_APP_CONTAINERS
               value: "{{ $containers | join "," }}"
             - name: ISTIO_META_CLUSTER_ID
-              value: "{{ valueOrDefault .Values.global.multiCluster.clusterName `Kubernetes` }}"
+              value: "{{ valueOrDefault .Values.global.multiCluster.clusterName {{ printf "\x60" }}Kubernetes{{ printf "\x60" }} }}"
             - name: ISTIO_META_INTERCEPTION_MODE
               value: "{{ .ProxyConfig.InterceptionMode.String }}"
             {{- if .Values.global.network }}
@@ -2242,7 +2242,7 @@ data:
             {{ end }}
             {{- if and .TypeMeta.APIVersion .DeploymentMeta.Name }}
             - name: ISTIO_META_OWNER
-              value: kubernetes://apis/{{ .TypeMeta.APIVersion }}/namespaces/{{ valueOrDefault .DeploymentMeta.Namespace `default` }}/{{ toLower .TypeMeta.Kind}}s/{{ .DeploymentMeta.Name }}
+              value: kubernetes://apis/{{ .TypeMeta.APIVersion }}/namespaces/{{ valueOrDefault .DeploymentMeta.Namespace {{ printf "\x60" }}default{{ printf "\x60" }} }}/{{ toLower .TypeMeta.Kind}}s/{{ .DeploymentMeta.Name }}
             {{- end}}
             {{- if .Values.global.meshID }}
             - name: ISTIO_META_MESH_ID
@@ -2431,8 +2431,8 @@ data:
         {{- range $index, $container := .Spec.Containers }}{{ if not (eq $container.Name "istio-proxy") }}{{ $containers = append $containers $container.Name }}{{end}}{{- end}}
         metadata:
           labels:
-            service.istio.io/canonical-name: {{ index .ObjectMeta.Labels `service.istio.io/canonical-name` | default (index .ObjectMeta.Labels `app.kubernetes.io/name`) | default (index .ObjectMeta.Labels `app`) | default .DeploymentMeta.Name  | quote }}
-            service.istio.io/canonical-revision: {{ index .ObjectMeta.Labels `service.istio.io/canonical-revision` | default (index .ObjectMeta.Labels `app.kubernetes.io/version`) | default (index .ObjectMeta.Labels `version`) | default "latest"  | quote }}
+            service.istio.io/canonical-name: {{ index .ObjectMeta.Labels {{ printf "\x60" }}service.istio.io/canonical-name{{ printf "\x60" }} | default (index .ObjectMeta.Labels {{ printf "\x60" }}app.kubernetes.io/name{{ printf "\x60" }}) | default (index .ObjectMeta.Labels {{ printf "\x60" }}app{{ printf "\x60" }}) | default .DeploymentMeta.Name  | quote }}
+            service.istio.io/canonical-revision: {{ index .ObjectMeta.Labels {{ printf "\x60" }}service.istio.io/canonical-revision{{ printf "\x60" }} | default (index .ObjectMeta.Labels {{ printf "\x60" }}app.kubernetes.io/version{{ printf "\x60" }}) | default (index .ObjectMeta.Labels {{ printf "\x60" }}version{{ printf "\x60" }}) | default "latest"  | quote }}
           annotations: {
             {{- if eq (len $containers) 1 }}
             kubectl.kubernetes.io/default-logs-container: "{{ index $containers 0 }}",
@@ -2459,8 +2459,8 @@ data:
           {{- end }}
           {{- end }}
           - name: istio-proxy
-          {{- if contains "/" (annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy.image) }}
-            image: "{{ annotation .ObjectMeta `sidecar.istio.io/proxyImage` .Values.global.proxy.image }}"
+          {{- if contains "/" (annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy.image) }}
+            image: "{{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/proxyImage{{ printf "\x60" }} .Values.global.proxy.image }}"
           {{- else }}
             image: "{{ .ProxyImage }}"
           {{- end }}
@@ -2469,7 +2469,7 @@ data:
             - sidecar
             - --domain
             - $(POD_NAMESPACE).svc.{{ .Values.global.proxy.clusterDomain }}
-            - --log_output_level={{ annotation .ObjectMeta `sidecar.istio.io/agentLogLevel` .Values.global.logging.level }}
+            - --log_output_level={{ annotation .ObjectMeta {{ printf "\x60" }}sidecar.istio.io/agentLogLevel{{ printf "\x60" }} .Values.global.logging.level }}
           {{- if .Values.global.sts.servicePort }}
             - --stsPort={{ .Values.global.sts.servicePort }}
           {{- end }}
@@ -2534,9 +2534,9 @@ data:
             - name: ISTIO_META_APP_CONTAINERS
               value: "{{ $containers | join "," }}"
             - name: ISTIO_META_CLUSTER_ID
-              value: "{{ valueOrDefault .Values.global.multiCluster.clusterName `Kubernetes` }}"
+              value: "{{ valueOrDefault .Values.global.multiCluster.clusterName {{ printf "\x60" }}Kubernetes{{ printf "\x60" }} }}"
             - name: ISTIO_META_INTERCEPTION_MODE
-              value: "{{ or (index .ObjectMeta.Annotations `sidecar.istio.io/interceptionMode`) .ProxyConfig.InterceptionMode.String }}"
+              value: "{{ or (index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/interceptionMode{{ printf "\x60" }}) .ProxyConfig.InterceptionMode.String }}"
             {{- if .Values.global.network }}
             - name: ISTIO_META_NETWORK
               value: "{{ .Values.global.network }}"
@@ -2547,7 +2547,7 @@ data:
             {{ end }}
             {{- if and .TypeMeta.APIVersion .DeploymentMeta.Name }}
             - name: ISTIO_META_OWNER
-              value: kubernetes://apis/{{ .TypeMeta.APIVersion }}/namespaces/{{ valueOrDefault .DeploymentMeta.Namespace `default` }}/{{ toLower .TypeMeta.Kind}}s/{{ .DeploymentMeta.Name }}
+              value: kubernetes://apis/{{ .TypeMeta.APIVersion }}/namespaces/{{ valueOrDefault .DeploymentMeta.Namespace {{ printf "\x60" }}default{{ printf "\x60" }} }}/{{ toLower .TypeMeta.Kind}}s/{{ .DeploymentMeta.Name }}
             {{- end}}
             {{- if .Values.global.meshID }}
             - name: ISTIO_META_MESH_ID
@@ -2570,34 +2570,34 @@ data:
             - name: DISABLE_ENVOY
               value: "true"
             {{with .Values.global.imagePullPolicy }}imagePullPolicy: "{{.}}"{{end}}
-            {{ if ne (annotation .ObjectMeta `status.sidecar.istio.io/port` .Values.global.proxy.statusPort) `0` }}
+            {{ if ne (annotation .ObjectMeta {{ printf "\x60" }}status.sidecar.istio.io/port{{ printf "\x60" }} .Values.global.proxy.statusPort) {{ printf "\x60" }}0{{ printf "\x60" }} }}
             readinessProbe:
               httpGet:
                 path: /healthz/ready
                 port: {{ .Values.global.proxy.statusPort }}
-              initialDelaySeconds: {{ annotation .ObjectMeta `readiness.status.sidecar.istio.io/initialDelaySeconds` .Values.global.proxy.readinessInitialDelaySeconds }}
-              periodSeconds: {{ annotation .ObjectMeta `readiness.status.sidecar.istio.io/periodSeconds` .Values.global.proxy.readinessPeriodSeconds }}
+              initialDelaySeconds: {{ annotation .ObjectMeta {{ printf "\x60" }}readiness.status.sidecar.istio.io/initialDelaySeconds{{ printf "\x60" }} .Values.global.proxy.readinessInitialDelaySeconds }}
+              periodSeconds: {{ annotation .ObjectMeta {{ printf "\x60" }}readiness.status.sidecar.istio.io/periodSeconds{{ printf "\x60" }} .Values.global.proxy.readinessPeriodSeconds }}
               timeoutSeconds: 3
-              failureThreshold: {{ annotation .ObjectMeta `readiness.status.sidecar.istio.io/failureThreshold` .Values.global.proxy.readinessFailureThreshold }}
+              failureThreshold: {{ annotation .ObjectMeta {{ printf "\x60" }}readiness.status.sidecar.istio.io/failureThreshold{{ printf "\x60" }} .Values.global.proxy.readinessFailureThreshold }}
             {{ end -}}
             resources:
-          {{- if or (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPU`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemory`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPULimit`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemoryLimit`) }}
-            {{- if or (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPU`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemory`) }}
+          {{- if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPU{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemory{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPULimit{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemoryLimit{{ printf "\x60" }}) }}
+            {{- if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPU{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemory{{ printf "\x60" }}) }}
               requests:
-                {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPU`) -}}
-                cpu: "{{ index .ObjectMeta.Annotations `sidecar.istio.io/proxyCPU` }}"
+                {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPU{{ printf "\x60" }}) -}}
+                cpu: "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPU{{ printf "\x60" }} }}"
                 {{ end }}
-                {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemory`) -}}
-                memory: "{{ index .ObjectMeta.Annotations `sidecar.istio.io/proxyMemory` }}"
+                {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemory{{ printf "\x60" }}) -}}
+                memory: "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemory{{ printf "\x60" }} }}"
                 {{ end }}
             {{- end }}
-            {{- if or (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPULimit`) (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemoryLimit`) }}
+            {{- if or (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPULimit{{ printf "\x60" }}) (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemoryLimit{{ printf "\x60" }}) }}
               limits:
-                {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyCPULimit`) -}}
-                cpu: "{{ index .ObjectMeta.Annotations `sidecar.istio.io/proxyCPULimit` }}"
+                {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPULimit{{ printf "\x60" }}) -}}
+                cpu: "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyCPULimit{{ printf "\x60" }} }}"
                 {{ end }}
-                {{ if (isset .ObjectMeta.Annotations `sidecar.istio.io/proxyMemoryLimit`) -}}
-                memory: "{{ index .ObjectMeta.Annotations `sidecar.istio.io/proxyMemoryLimit` }}"
+                {{ if (isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemoryLimit{{ printf "\x60" }}) -}}
+                memory: "{{ index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/proxyMemoryLimit{{ printf "\x60" }} }}"
                 {{ end }}
             {{- end }}
           {{- else }}
@@ -2625,8 +2625,8 @@ data:
             {{- end }}
             - name: istio-podinfo
               mountPath: /etc/istio/pod
-            {{- if isset .ObjectMeta.Annotations `sidecar.istio.io/userVolumeMount` }}
-            {{ range $index, $value := fromJSON (index .ObjectMeta.Annotations `sidecar.istio.io/userVolumeMount`) }}
+            {{- if isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/userVolumeMount{{ printf "\x60" }} }}
+            {{ range $index, $value := fromJSON (index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/userVolumeMount{{ printf "\x60" }}) }}
             - name: "{{  $index }}"
             {{ toYaml $value | indent 6 }}
             {{ end }}
@@ -2665,12 +2665,12 @@ data:
             configMap:
               name: istio-ca-root-cert
           {{- end }}
-          {{- if isset .ObjectMeta.Annotations `sidecar.istio.io/userVolume` }}
-          {{range $index, $value := fromJSON (index .ObjectMeta.Annotations `sidecar.istio.io/userVolume`) }}
+          {{- if isset .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/userVolume{{ printf "\x60" }} }}
+          {{range $index, $value := fromJSON (index .ObjectMeta.Annotations {{ printf "\x60" }}sidecar.istio.io/userVolume{{ printf "\x60" }}) }}
           - name: "{{ $index }}"
           {{ toYaml $value | indent 4 }}
           {{ end }}
-          {{ end }}
+          {{ end }}`}}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
