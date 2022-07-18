@@ -1817,10 +1817,6 @@ spec:
           initialDelaySeconds: 1
           periodSeconds: 3
           timeoutSeconds: 5
-        resources:
-          requests:
-            cpu: 500m
-            memory: 2048Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
