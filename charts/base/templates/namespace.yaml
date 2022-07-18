@@ -3,6 +3,7 @@ kind: Namespace
 metadata:
   labels:
     kubernetes.io/metadata.name: istio-system
+    topology.istio.io/network: network1
   name: istio-system
 spec:
   finalizers:
