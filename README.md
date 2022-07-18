@@ -10,3 +10,9 @@ istioctl-1-14-1 manifest generate -r 1-14-1 --component IngressGateways -f confi
 ```
 sed -i 's/`/{{ printf "\\x60" }}/g' charts/pilot/templates/config.yaml
 ```
+
+```
+cat charts/pilot/templates/config.yaml | \
+yq ea '[.] | .[] | select(.kind == "ConfigMap") | select(.metadata.name == "istio-sidecar-injector*") | \
+.data.config' > charts/pilot/files/istio-sidecar-injector.raw
+```
