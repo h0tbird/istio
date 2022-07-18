@@ -6,7 +6,7 @@ metadata:
   labels:
     app: istio-eastwestgateway
     istio: eastwestgateway
-    topology.istio.io/network: network1
+    topology.istio.io/network: {{ .Values.network }}
     release: istio
     istio.io/rev: 1-14-1
     install.operator.istio.io/owning-resource: unknown
@@ -22,7 +22,7 @@ metadata:
     istio.io/rev: 1-14-1
     operator.istio.io/component: IngressGateways
     release: istio
-    topology.istio.io/network: network1
+    topology.istio.io/network: {{ .Values.network }}
   name: istio-eastwestgateway
   namespace: istio-system
 spec:
@@ -30,7 +30,7 @@ spec:
     matchLabels:
       app: istio-eastwestgateway
       istio: eastwestgateway
-      topology.istio.io/network: network1
+      topology.istio.io/network: {{ .Values.network }}
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -53,7 +53,7 @@ spec:
         operator.istio.io/component: IngressGateways
         release: istio
         sidecar.istio.io/inject: "true"
-        topology.istio.io/network: network1
+        topology.istio.io/network: {{ .Values.network }}
     spec:
       affinity:
         nodeAffinity:
@@ -99,7 +99,7 @@ spec:
       containers:
       - env:
         - name: ISTIO_META_REQUESTED_NETWORK_VIEW
-          value: network1
+          value: {{ .Values.network }}
         - name: ISTIO_META_UNPRIVILEGED_POD
           value: "true"
         image: auto
@@ -161,7 +161,7 @@ metadata:
   labels:
     app: istio-eastwestgateway
     istio: eastwestgateway
-    topology.istio.io/network: network1
+    topology.istio.io/network: {{ .Values.network }}
     release: istio
     istio.io/rev: 1-14-1
     install.operator.istio.io/owning-resource: unknown
@@ -172,7 +172,7 @@ spec:
     matchLabels:
       app: istio-eastwestgateway
       istio: eastwestgateway
-      topology.istio.io/network: network1
+      topology.istio.io/network: {{ .Values.network }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -215,7 +215,7 @@ metadata:
   labels:
     app: istio-eastwestgateway
     istio: eastwestgateway
-    topology.istio.io/network: network1
+    topology.istio.io/network: {{ .Values.network }}
     release: istio
     istio.io/rev: 1-14-1
     install.operator.istio.io/owning-resource: unknown
@@ -246,7 +246,7 @@ metadata:
     istio.io/rev: 1-14-1
     operator.istio.io/component: IngressGateways
     release: istio
-    topology.istio.io/network: network1
+    topology.istio.io/network: {{ .Values.network }}
   name: istio-eastwestgateway
   namespace: istio-system
 spec:
@@ -270,6 +270,6 @@ spec:
   selector:
     app: istio-eastwestgateway
     istio: eastwestgateway
-    topology.istio.io/network: network1
+    topology.istio.io/network: {{ .Values.network }}
   type: LoadBalancer
 ---
