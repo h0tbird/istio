@@ -20,6 +20,11 @@ spec:
                 exec:
                   command: ["sleep", "5"]
   values:
+    global:
+      meshID: mesh-XXXX
+      multiCluster:
+        clusterName: cluster-XXXX
+      network: network-XXXX
     gateways:
       istio-ingressgateway:
         autoscaleEnabled: false

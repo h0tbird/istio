@@ -1477,7 +1477,7 @@ data:
     accessLogFile: /dev/stdout
     defaultConfig:
       discoveryAddress: istiod-1-14-1.istio-system.svc:15012
-      meshId: octomesh
+      meshId: {{ .Values.mesh }}
       proxyMetadata: {}
       tracing:
         zipkin:
@@ -1525,19 +1525,19 @@ data:
           "enableAnalysis": false
         },
         "jwtPolicy": "third-party-jwt",
-        "logAsJson": true,
+        "logAsJson": false,
         "logging": {
           "level": "default:info"
         },
-        "meshID": "octomesh",
+        "meshID": {{ .Values.mesh | quote }},
         "meshNetworks": {},
         "mountMtlsCerts": false,
         "multiCluster": {
-          "clusterName": "",
+          "clusterName": {{ .Values.cluster | quote }},
           "enabled": false
         },
         "namespace": "istio-system",
-        "network": "",
+        "network": {{ .Values.network | quote }},
         "omitSidecarInjectorConfigMap": false,
         "oneNamespace": false,
         "operatorManageWebhooks": false,
@@ -1637,7 +1637,6 @@ data:
   #
   # New fields should not use Values - it is a 'primary' config object, users should be able
   # to fine tune it or use it with kube-inject.
-
   config: |-
     {{- .Files.Get "files/istio-sidecar-injector.raw" | nindent 4 }}
 ---
@@ -1754,7 +1753,6 @@ spec:
         - discovery
         - --monitoringAddr=:15014
         - --log_output_level=default:info
-        - --log_as_json
         - --domain
         - cluster.local
         - --keepaliveMaxServerConnectionAge
@@ -1794,7 +1792,7 @@ spec:
         - name: PILOT_ENABLE_ANALYSIS
           value: "false"
         - name: CLUSTER_ID
-          value: Kubernetes
+          value: {{ .Values.cluster }}
         image: ghcr.io/resf/istio/pilot:1.14.1
         lifecycle:
           preStop:

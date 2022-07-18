@@ -6,3 +6,9 @@ spec:
   components:
     base:
       enabled: true
+  values:
+    global:
+      meshID: mesh-XXXX
+      multiCluster:
+        clusterName: cluster-XXXX
+      network: network-XXXX

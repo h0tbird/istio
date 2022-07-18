@@ -27,5 +27,7 @@ spec:
     pilot:
       autoscaleEnabled: false
     global:
-      meshID: "octomesh"
-      logAsJson: true
+      meshID: mesh-XXXX
+      multiCluster:
+        clusterName: cluster-XXXX
+      network: network-XXXX
