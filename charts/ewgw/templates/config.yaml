@@ -252,7 +252,7 @@ metadata:
 spec:
   ports:
   - name: status-port
-    port: 15021
+    port: 15022
     protocol: TCP
     targetPort: 15021
   - name: tls
