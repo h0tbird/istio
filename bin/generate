@@ -1,14 +1,23 @@
 #!/bin/bash
 
+function getComponent {
+  [ "$1" == "EastWestGateway" ] && { echo IngressGateways; exit; }
+  echo $1
+}
+
+function getConfig {
+  [ "$1" == "EastWestGateway" ] && { echo "-f ./config/iop-ewgw.yaml"; exit; }
+  echo "-f ./config/iop-igws.yaml"
+}
+
 function generate {
   istioctl-$1 manifest generate -r $1 \
-    --component $2 \
+    --component $(getComponent $2) \
     -s "components.pilot.k8s.overlays[0].name=istiod-${1}" \
     -f ./config/iop-base.yaml \
     -f ./config/iop-cni.yaml \
     -f ./config/iop-pilot.yaml \
-    -f ./config/iop-igws.yaml \
-    -f ./config/iop-ewgw.yaml |
+    $(getConfig $2) |
   sed '
     s/cluster-XXXX/{{ .Values.cluster }}/g;
     s/network-XXXX/{{ .Values.network }}/g;

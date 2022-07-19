@@ -5,8 +5,7 @@
 ./bin/generate 1-14-1 Cni > charts/cni/templates/config.yaml
 ./bin/generate 1-14-1 Pilot > charts/pilot/templates/config.yaml
 ./bin/generate 1-14-1 IngressGateways > charts/igws/templates/config.yaml
-istioctl-1-14-1 manifest generate -r 1-14-1 --component IngressGateways -f config/iop-igws.yaml > charts/igws/templates/config.yaml
-istioctl-1-14-1 manifest generate -r 1-14-1 --component IngressGateways -f config/iop-ewgw.yaml > charts/ewgw/templates/config.yaml
+./bin/generate 1-14-1 EastWestGateway > charts/ewgw/templates/config.yaml
 ```
 
 ```
