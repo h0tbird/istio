@@ -8,6 +8,8 @@ spec:
       enabled: true
   values:
     global:
+      proxy:
+        privileged: true
       meshID: mesh-XXXX
       multiCluster:
         clusterName: cluster-XXXX

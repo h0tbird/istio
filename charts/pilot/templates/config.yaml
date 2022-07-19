@@ -1529,15 +1529,15 @@ data:
         "logging": {
           "level": "default:info"
         },
-        "meshID": {{ .Values.mesh | quote }},
+        "meshID": "{{ .Values.mesh }}",
         "meshNetworks": {},
         "mountMtlsCerts": false,
         "multiCluster": {
-          "clusterName": {{ .Values.cluster | quote }},
+          "clusterName": "{{ .Values.cluster }}",
           "enabled": false
         },
         "namespace": "istio-system",
-        "network": {{ .Values.network | quote }},
+        "network": "{{ .Values.network }}",
         "omitSidecarInjectorConfigMap": false,
         "oneNamespace": false,
         "operatorManageWebhooks": false,
@@ -1557,7 +1557,7 @@ data:
           "includeInboundPorts": "*",
           "includeOutboundPorts": "",
           "logLevel": "warning",
-          "privileged": false,
+          "privileged": true,
           "readinessFailureThreshold": 30,
           "readinessInitialDelaySeconds": 1,
           "readinessPeriodSeconds": 2,
