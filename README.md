@@ -1,9 +1,10 @@
 # istio
 
 ```
-istioctl-1-14-1 manifest generate -r 1-14-1 --component Base -f config/iop-base.yaml > charts/base/templates/config.yaml
-istioctl-1-14-1 manifest generate -r 1-14-1 --component Cni -f config/iop-cni.yaml > charts/cni/templates/config.yaml
-istioctl-1-14-1 manifest generate -r 1-14-1 --component Pilot -s "components.pilot.k8s.overlays[0].name=istiod-1-14-1" -f config/iop-pilot.yaml > charts/pilot/templates/config.yaml
+./bin/generate 1-14-1 Base > charts/base/templates/config.yaml
+./bin/generate 1-14-1 Cni > charts/cni/templates/config.yaml
+./bin/generate 1-14-1 Pilot > charts/pilot/templates/config.yaml
+./bin/generate 1-14-1 IngressGateways > charts/igws/templates/config.yaml
 istioctl-1-14-1 manifest generate -r 1-14-1 --component IngressGateways -f config/iop-igws.yaml > charts/igws/templates/config.yaml
 istioctl-1-14-1 manifest generate -r 1-14-1 --component IngressGateways -f config/iop-ewgw.yaml > charts/ewgw/templates/config.yaml
 ```
