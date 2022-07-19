@@ -1,0 +1,14 @@
+#!/bin/bash
+
+function generate {
+  istioctl-$1 manifest generate -r $1 \
+  --component $2 \
+  -s "components.pilot.k8s.overlays[0].name=istiod-${1}" \
+  -f ./config/iop-base.yaml \
+  -f ./config/iop-cni.yaml \
+  -f ./config/iop-pilot.yaml \
+  -f ./config/iop-igws.yaml \
+  -f ./config/iop-ewgw.yaml
+}
+
+[ $# -eq 2 ] && generate "$@"
