@@ -1,3 +1,5 @@
+---
+# Expose cluster services
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -15,3 +17,29 @@ spec:
         mode: AUTO_PASSTHROUGH
       hosts:
         - "*.local"
+---
+# Expose the control-plane
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istiod-gateway
+spec:
+  selector:
+    istio: eastwestgateway
+  servers:
+    - port:
+        name: tls-istiod
+        number: 15012
+        protocol: tls
+      tls:
+        mode: PASSTHROUGH
+      hosts:
+        - "*"
+    - port:
+        name: tls-istiodwebhook
+        number: 15017
+        protocol: tls
+      tls:
+        mode: PASSTHROUGH
+      hosts:
+        - "*"
