@@ -26,6 +26,9 @@ spec:
       enabled: true
     pilot:
       autoscaleEnabled: false
+      env:
+        PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
+        PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true
     global:
       meshID: mesh-XXXX
       multiCluster:
