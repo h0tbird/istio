@@ -14,5 +14,5 @@ cat charts/pilot/templates/config.yaml | yq ea '[.] | .[19] | .data.config' \
 ```
 
 ```
-./samples/multicluster/gen-eastwest-gateway.sh --revision 1-14-1 --mesh mesh1 --cluster cluster1 --network network1
+./samples/multicluster/gen-eastwest-gateway.sh --revision 1-14-1 --mesh mesh1 --cluster kube-01 --network network1
 ```

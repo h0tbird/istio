@@ -1,4 +1,4 @@
 ---
 mesh: mesh1
 network: network2
-cluster: cluster2
+cluster: kube-02
