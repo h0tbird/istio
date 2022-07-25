@@ -1,8 +1,9 @@
 # istio
 
+Initial scaffolding:
 ```
-./bin/generate 1-14-1 Base > charts/base/templates/config.yaml
-./bin/generate 1-14-1 Cni > charts/cni/templates/config.yaml
+./bin/generate 1-14-2 Base > charts/base/templates/config.yaml
+./bin/generate 1-14-2 Cni > charts/cni/templates/config.yaml
 ./bin/generate 1-14-1 Pilot > charts/pilot/templates/config.yaml
 ./bin/generate 1-14-1 IngressGateways > charts/igws/templates/config.yaml
 ./bin/generate 1-14-1 EastWestGateway > charts/ewgw/templates/config.yaml
