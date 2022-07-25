@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: istiod-1-14-1
+  name: istiod-1-14-2
   namespace: istio-system
   labels:
     app: istiod
@@ -10,7 +10,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: istio-reader-clusterrole-1-14-1-istio-system
+  name: istio-reader-clusterrole-1-14-2-istio-system
   labels:
     app: istio-reader
     release: istio
@@ -54,7 +54,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: istiod-clusterrole-1-14-1-istio-system
+  name: istiod-clusterrole-1-14-2-istio-system
   labels:
     app: istiod
     release: istio
@@ -161,7 +161,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: istiod-gateway-controller-1-14-1-istio-system
+  name: istiod-gateway-controller-1-14-2-istio-system
   labels:
     app: istiod
     release: istio
@@ -176,14 +176,14 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: istio-reader-clusterrole-1-14-1-istio-system
+  name: istio-reader-clusterrole-1-14-2-istio-system
   labels:
     app: istio-reader
     release: istio
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: istio-reader-clusterrole-1-14-1-istio-system
+  name: istio-reader-clusterrole-1-14-2-istio-system
 subjects:
   - kind: ServiceAccount
     name: istio-reader-service-account
@@ -192,44 +192,44 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: istiod-clusterrole-1-14-1-istio-system
+  name: istiod-clusterrole-1-14-2-istio-system
   labels:
     app: istiod
     release: istio
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: istiod-clusterrole-1-14-1-istio-system
+  name: istiod-clusterrole-1-14-2-istio-system
 subjects:
   - kind: ServiceAccount
-    name: istiod-1-14-1
+    name: istiod-1-14-2
     namespace: istio-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: istiod-gateway-controller-1-14-1-istio-system
+  name: istiod-gateway-controller-1-14-2-istio-system
   labels:
     app: istiod
     release: istio
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: istiod-gateway-controller-1-14-1-istio-system
+  name: istiod-gateway-controller-1-14-2-istio-system
 subjects:
 - kind: ServiceAccount
-  name: istiod-1-14-1
+  name: istiod-1-14-2
   namespace: istio-system
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: istio-validator-1-14-1-istio-system
+  name: istio-validator-1-14-2-istio-system
   labels:
     app: istiod
     release: istio
     istio: istiod
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 webhooks:
   # Webhook handling per-revision validation. Mostly here so we can determine whether webhooks
   # are rejecting invalid configs on a per-revision basis.
@@ -237,7 +237,7 @@ webhooks:
     clientConfig:
       # Should change from base but cannot for API compat
       service:
-        name: istiod-1-14-1
+        name: istiod-1-14-2
         namespace: istio-system
         path: "/validate"
     rules:
@@ -264,15 +264,15 @@ webhooks:
         - key: istio.io/rev
           operator: In
           values:
-          - "1-14-1"
+          - "1-14-2"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: stats-filter-1.11-1-14-1
+  name: stats-filter-1.11-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -392,10 +392,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: stats-filter-1.12-1-14-1
+  name: stats-filter-1.12-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -515,10 +515,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: stats-filter-1.13-1-14-1
+  name: stats-filter-1.13-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -638,10 +638,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: stats-filter-1.14-1-14-1
+  name: stats-filter-1.14-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -761,10 +761,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: stats-filter-1.15-1-14-1
+  name: stats-filter-1.15-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -884,10 +884,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-stats-filter-1.11-1-14-1
+  name: tcp-stats-filter-1.11-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -999,10 +999,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-stats-filter-1.12-1-14-1
+  name: tcp-stats-filter-1.12-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -1114,10 +1114,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-stats-filter-1.13-1-14-1
+  name: tcp-stats-filter-1.13-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -1229,10 +1229,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-stats-filter-1.14-1-14-1
+  name: tcp-stats-filter-1.14-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -1344,10 +1344,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
-  name: tcp-stats-filter-1.15-1-14-1
+  name: tcp-stats-filter-1.15-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 spec:
   priority: -1
   configPatches:
@@ -1459,10 +1459,10 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: istio-1-14-1
+  name: istio-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "Pilot"
     release: istio
@@ -1476,7 +1476,7 @@ data:
     accessLogEncoding: JSON
     accessLogFile: /dev/stdout
     defaultConfig:
-      discoveryAddress: istiod-1-14-1.istio-system.svc:15012
+      discoveryAddress: istiod-1-14-2.istio-system.svc:15012
       meshId: {{ .Values.mesh }}
       proxyMetadata: {}
       tracing:
@@ -1489,10 +1489,10 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: istio-sidecar-injector-1-14-1
+  name: istio-sidecar-injector-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "Pilot"
     release: istio
@@ -1596,7 +1596,7 @@ data:
         "sts": {
           "servicePort": 0
         },
-        "tag": "1.14.1",
+        "tag": "1.14.2",
         "tracer": {
           "datadog": {
             "address": "$(HOST_IP):8126"
@@ -1620,7 +1620,7 @@ data:
       "istio_cni": {
         "enabled": true
       },
-      "revision": "1-14-1",
+      "revision": "1-14-2",
       "sidecarInjectorWebhook": {
         "alwaysInjectSelector": [],
         "defaultTemplates": [],
@@ -1643,9 +1643,9 @@ data:
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: istio-sidecar-injector-1-14-1
+  name: istio-sidecar-injector-1-14-2
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "Pilot"
     app: sidecar-injector
@@ -1654,7 +1654,7 @@ webhooks:
 - name: rev.namespace.sidecar-injector.istio.io
   clientConfig:
     service:
-      name: istiod-1-14-1
+      name: istiod-1-14-2
       namespace: istio-system
       path: "/inject"
       port: 443
@@ -1671,7 +1671,7 @@ webhooks:
     - key: istio.io/rev
       operator: In
       values:
-      - "1-14-1"
+      - "1-14-2"
     - key: istio-injection
       operator: DoesNotExist
   objectSelector:
@@ -1683,7 +1683,7 @@ webhooks:
 - name: rev.object.sidecar-injector.istio.io
   clientConfig:
     service:
-      name: istiod-1-14-1
+      name: istiod-1-14-2
       namespace: istio-system
       path: "/inject"
       port: 443
@@ -1710,7 +1710,7 @@ webhooks:
     - key: istio.io/rev
       operator: In
       values:
-      - "1-14-1"
+      - "1-14-2"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1719,17 +1719,17 @@ metadata:
     app: istiod
     install.operator.istio.io/owning-resource: unknown
     istio: pilot
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
     operator.istio.io/component: Pilot
     release: istio
-  name: istiod-1-14-1
+  name: istiod-1-14-2
   namespace: istio-system
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: istiod
-      istio.io/rev: 1-14-1
+      istio.io/rev: 1-14-2
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -1744,7 +1744,7 @@ spec:
         app: istiod
         install.operator.istio.io/owning-resource: unknown
         istio: istiod
-        istio.io/rev: 1-14-1
+        istio.io/rev: 1-14-2
         operator.istio.io/component: Pilot
         sidecar.istio.io/inject: "false"
     spec:
@@ -1759,7 +1759,7 @@ spec:
         - 30m
         env:
         - name: REVISION
-          value: 1-14-1
+          value: 1-14-2
         - name: JWT_POLICY
           value: third-party-jwt
         - name: PILOT_CERT_PROVIDER
@@ -1792,12 +1792,12 @@ spec:
         - name: PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_INBOUND
           value: "true"
         - name: ISTIOD_ADDR
-          value: istiod-1-14-1.istio-system.svc:15012
+          value: istiod-1-14-2.istio-system.svc:15012
         - name: PILOT_ENABLE_ANALYSIS
           value: "false"
         - name: CLUSTER_ID
           value: {{ .Values.cluster }}
-        image: ghcr.io/resf/istio/pilot:1.14.1
+        image: ghcr.io/resf/istio/pilot:1.14.2
         lifecycle:
           preStop:
             exec:
@@ -1842,7 +1842,7 @@ spec:
           readOnly: true
       securityContext:
         fsGroup: 1337
-      serviceAccountName: istiod-1-14-1
+      serviceAccountName: istiod-1-14-2
       volumes:
       - emptyDir:
           medium: Memory
@@ -1866,11 +1866,11 @@ spec:
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: istiod-1-14-1
+  name: istiod-1-14-2
   namespace: istio-system
   labels:
     app: istiod
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "Pilot"
     release: istio
@@ -1880,12 +1880,12 @@ spec:
   selector:
     matchLabels:
       app: istiod
-      istio.io/rev: 1-14-1
+      istio.io/rev: 1-14-2
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: istiod-1-14-1
+  name: istiod-1-14-2
   namespace: istio-system
   labels:
     app: istiod
@@ -1903,7 +1903,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: istiod-1-14-1
+  name: istiod-1-14-2
   namespace: istio-system
   labels:
     app: istiod
@@ -1911,19 +1911,19 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: istiod-1-14-1
+  name: istiod-1-14-2
 subjects:
   - kind: ServiceAccount
-    name: istiod-1-14-1
+    name: istiod-1-14-2
     namespace: istio-system
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: istiod-1-14-1
+  name: istiod-1-14-2
   namespace: istio-system
   labels:
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "Pilot"
     app: istiod
@@ -1946,5 +1946,5 @@ spec:
       protocol: TCP
   selector:
     app: istiod
-    istio.io/rev: 1-14-1
+    istio.io/rev: 1-14-2
 ---
