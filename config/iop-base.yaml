@@ -10,6 +10,7 @@ spec:
     global:
       proxy:
         privileged: true
+        enableCoreDump: true
       meshID: mesh-XXXX
       multiCluster:
         clusterName: cluster-XXXX

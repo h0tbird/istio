@@ -9,6 +9,7 @@ Initial scaffolding:
 ./bin/generate 1-14-2 EastWestGateway > charts/ewgw/templates/config.yaml
 ```
 
+Extract the sidecar-injector template:
 ```
 cat charts/pilot/templates/config.yaml | yq ea '[.] | .[19] | .data.config' \
 > charts/pilot/files/istio-sidecar-injector.raw
