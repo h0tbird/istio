@@ -1525,7 +1525,7 @@ data:
           "enableAnalysis": false
         },
         "jwtPolicy": "third-party-jwt",
-        "logAsJson": false,
+        "logAsJson": true,
         "logging": {
           "level": "default:info"
         },
@@ -1753,6 +1753,7 @@ spec:
         - discovery
         - --monitoringAddr=:15014
         - --log_output_level=default:info
+        - --log_as_json
         - --domain
         - cluster.local
         - --keepaliveMaxServerConnectionAge
@@ -1781,6 +1782,8 @@ spec:
               fieldPath: spec.serviceAccountName
         - name: KUBECONFIG
           value: /var/run/secrets/remote/config
+        - name: ISTIOD_CUSTOM_HOST
+          value: istiod.{{ .Values.cluster }}
         - name: PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION
           value: "true"
         - name: PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS
