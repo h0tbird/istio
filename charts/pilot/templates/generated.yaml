@@ -1782,8 +1782,6 @@ spec:
               fieldPath: spec.serviceAccountName
         - name: KUBECONFIG
           value: /var/run/secrets/remote/config
-        - name: ENABLE_CA_SERVER
-          value: "false"
         - name: ISTIOD_CUSTOM_HOST
           value: istiod.{{ .Values.cluster }}
         - name: PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION

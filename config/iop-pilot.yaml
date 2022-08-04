@@ -30,7 +30,6 @@ spec:
         PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
         PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true
         ISTIOD_CUSTOM_HOST: istiod.cluster-XXXX
-        ENABLE_CA_SERVER: false
     global:
       meshID: mesh-XXXX
       multiCluster:
