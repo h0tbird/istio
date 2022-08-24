@@ -20,6 +20,7 @@ function generate {
     $(getConfig $2) |
   sed '
     s/cluster-XXXX/{{ .Values.cluster }}/g;
+    s/domain-XXXX/{{ .Values.domain }}/g;
     s/network-XXXX/{{ .Values.network }}/g;
     s/mesh-XXXX/{{ .Values.mesh }}/g;
   '

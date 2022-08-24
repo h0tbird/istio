@@ -11,7 +11,7 @@ spec:
       proxy:
         privileged: true
         enableCoreDump: true
-        clusterDomain: cluster-XXXX
+        clusterDomain: domain-XXXX
       meshID: mesh-XXXX
       multiCluster:
         clusterName: cluster-XXXX

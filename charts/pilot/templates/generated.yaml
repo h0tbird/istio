@@ -1545,7 +1545,7 @@ data:
         "priorityClassName": "",
         "proxy": {
           "autoInject": "enabled",
-          "clusterDomain": "{{ .Values.cluster }}",
+          "clusterDomain": "{{ .Values.domain }}",
           "componentLogLevel": "misc:error",
           "enableCoreDump": true,
           "excludeIPRanges": "",
@@ -1755,7 +1755,7 @@ spec:
         - --log_output_level=default:info
         - --log_as_json
         - --domain
-        - {{ .Values.cluster }}
+        - {{ .Values.domain }}
         - --keepaliveMaxServerConnectionAge
         - 30m
         env:

@@ -2,3 +2,4 @@
 mesh: mesh1
 network: network1
 cluster: kube-01
+domain: kube-01.local
