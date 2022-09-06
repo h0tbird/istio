@@ -4,7 +4,7 @@ metadata:
   name: eastwest
 spec:
   profile: empty
-  hub: ghcr.io/resf/istio
+  hub: docker.io/istio
   components:
     ingressGateways:
       - name: istio-eastwestgateway

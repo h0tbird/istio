@@ -2,7 +2,7 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 spec:
   profile: default
-  hub: ghcr.io/resf/istio
+  hub: docker.io/istio
   components:
     ingressGateways:
     - name: istio-ingressgateway

@@ -8,7 +8,7 @@ metadata:
     istio: eastwestgateway
     topology.istio.io/network: {{ .Values.network }}
     release: istio
-    istio.io/rev: 1-14-2
+    istio.io/rev: 1-15-0
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "IngressGateways"
 ---
@@ -19,7 +19,7 @@ metadata:
     app: istio-eastwestgateway
     install.operator.istio.io/owning-resource: unknown
     istio: eastwestgateway
-    istio.io/rev: 1-14-2
+    istio.io/rev: 1-15-0
     operator.istio.io/component: IngressGateways
     release: istio
     topology.istio.io/network: {{ .Values.network }}
@@ -49,7 +49,7 @@ spec:
         heritage: Tiller
         install.operator.istio.io/owning-resource: unknown
         istio: eastwestgateway
-        istio.io/rev: 1-14-2
+        istio.io/rev: 1-15-0
         operator.istio.io/component: IngressGateways
         release: istio
         sidecar.istio.io/inject: "true"
@@ -57,45 +57,8 @@ spec:
     spec:
       affinity:
         nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - preference:
-              matchExpressions:
-              - key: kubernetes.io/arch
-                operator: In
-                values:
-                - amd64
-            weight: 2
-          - preference:
-              matchExpressions:
-              - key: kubernetes.io/arch
-                operator: In
-                values:
-                - arm64
-            weight: 2
-          - preference:
-              matchExpressions:
-              - key: kubernetes.io/arch
-                operator: In
-                values:
-                - ppc64le
-            weight: 2
-          - preference:
-              matchExpressions:
-              - key: kubernetes.io/arch
-                operator: In
-                values:
-                - s390x
-            weight: 2
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/arch
-                operator: In
-                values:
-                - amd64
-                - arm64
-                - ppc64le
-                - s390x
+          preferredDuringSchedulingIgnoredDuringExecution: null
+          requiredDuringSchedulingIgnoredDuringExecution: null
       containers:
       - env:
         - name: ISTIO_META_REQUESTED_NETWORK_VIEW
@@ -163,7 +126,7 @@ metadata:
     istio: eastwestgateway
     topology.istio.io/network: {{ .Values.network }}
     release: istio
-    istio.io/rev: 1-14-2
+    istio.io/rev: 1-15-0
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "IngressGateways"
 spec:
@@ -181,7 +144,7 @@ metadata:
   namespace: istio-system
   labels:
     release: istio
-    istio.io/rev: 1-14-2
+    istio.io/rev: 1-15-0
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "IngressGateways"
 rules:
@@ -196,7 +159,7 @@ metadata:
   namespace: istio-system
   labels:
     release: istio
-    istio.io/rev: 1-14-2
+    istio.io/rev: 1-15-0
     install.operator.istio.io/owning-resource: unknown
     operator.istio.io/component: "IngressGateways"
 roleRef:
@@ -215,7 +178,7 @@ metadata:
     app: istio-eastwestgateway
     install.operator.istio.io/owning-resource: unknown
     istio: eastwestgateway
-    istio.io/rev: 1-14-2
+    istio.io/rev: 1-15-0
     operator.istio.io/component: IngressGateways
     release: istio
     topology.istio.io/network: {{ .Values.network }}
