@@ -2,16 +2,10 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 spec:
   profile: default
-  hub: docker.io/istio
   components:
     cni:
       enabled: true
   values:
-    global:
-      meshID: mesh-XXXX
-      multiCluster:
-        clusterName: cluster-XXXX
-      network: network-XXXX
     cni:
       pullPolicy: IfNotPresent
       excludeNamespaces:

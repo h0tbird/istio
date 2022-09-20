@@ -2,7 +2,6 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 spec:
   profile: default
-  hub: docker.io/istio
   components:
     pilot:
       enabled: true
@@ -30,9 +29,3 @@ spec:
         PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
         PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true
         ISTIOD_CUSTOM_HOST: istiod.cluster-XXXX
-    global:
-      meshID: mesh-XXXX
-      multiCluster:
-        clusterName: cluster-XXXX
-      network: network-XXXX
-      logAsJson: true

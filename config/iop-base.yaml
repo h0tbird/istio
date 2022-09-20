@@ -16,3 +16,4 @@ spec:
       multiCluster:
         clusterName: cluster-XXXX
       network: network-XXXX
+      logAsJson: true

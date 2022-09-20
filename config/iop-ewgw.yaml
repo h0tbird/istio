@@ -4,7 +4,6 @@ metadata:
   name: eastwest
 spec:
   profile: empty
-  hub: docker.io/istio
   components:
     ingressGateways:
       - name: istio-eastwestgateway
@@ -35,6 +34,5 @@ spec:
   values:
     gateways:
       istio-ingressgateway:
+        autoscaleEnabled: false
         injectionTemplate: gateway
-    global:
-      network: network-XXXX
