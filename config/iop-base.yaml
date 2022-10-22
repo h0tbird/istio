@@ -3,6 +3,7 @@ kind: IstioOperator
 spec:
   profile: default
   hub: docker.io/istio
+  revision: revision-XXXX
   components:
     base:
       enabled: true

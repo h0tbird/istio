@@ -10,7 +10,7 @@ spec:
         overlays:
         - apiVersion: apps/v1
           kind: Deployment
-          name: istiod
+          name: istiod-revision-XXXX
           patches:
           - path: spec.template.spec.containers[0].lifecycle
             value:

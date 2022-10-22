@@ -3,3 +3,4 @@ mesh: mesh1
 network: network2
 cluster: kube-02
 domain: cluster.local
+revision: 1-15-0

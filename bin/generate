@@ -11,9 +11,8 @@ function getConfig {
 }
 
 function generate {
-  istioctl-$1 manifest generate -r $1 \
+  istioctl-$1 manifest generate \
     --component $(getComponent $2) \
-    -s "components.pilot.k8s.overlays[0].name=istiod-${1}" \
     -f ./config/iop-base.yaml \
     -f ./config/iop-cni.yaml \
     -f ./config/iop-pilot.yaml \
@@ -23,6 +22,7 @@ function generate {
     s/domain-XXXX/{{ .Values.domain }}/g;
     s/network-XXXX/{{ .Values.network }}/g;
     s/mesh-XXXX/{{ .Values.mesh }}/g;
+    s/revision-XXXX/{{ .Values.revision }}/g;
   '
 }
 
