@@ -39,3 +39,14 @@ generate 1-16-0 Cni > charts/cni/templates/generated.yaml
 generate 1-16-0 Pilot > charts/pilot/templates/generated.yaml
 generate 1-16-0 IngressGateways > charts/igws/templates/generated.yaml
 generate 1-16-0 EastWestGateway > charts/ewgw/templates/generated.yaml
+
+#------------------------------------------------------------------------------
+# Extract the side-car injector config from the pilot generated yaml
+# and save it in a separate file because it contains a template and
+# helm gets confused if it is in the same file and it is not escaped.
+#------------------------------------------------------------------------------
+
+yq '. |
+  select(.kind == "ConfigMap" and .metadata.name == "istio-sidecar-injector-*") |
+  .data.config' "charts/pilot/templates/generated.yaml" \
+  > "charts/pilot/files/istio-sidecar-injector.raw"
