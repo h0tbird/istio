@@ -2,11 +2,7 @@
 
 Initial scaffolding:
 ```
-./bin/generate 1-16-0 Base > charts/base/templates/generated.yaml
-./bin/generate 1-16-0 Cni > charts/cni/templates/generated.yaml
-./bin/generate 1-16-0 Pilot > charts/pilot/templates/generated.yaml
-./bin/generate 1-16-0 IngressGateways > charts/igws/templates/generated.yaml
-./bin/generate 1-16-0 EastWestGateway > charts/ewgw/templates/generated.yaml
+./bin/generate
 ```
 
 Extract the sidecar-injector template:

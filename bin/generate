@@ -1,8 +1,12 @@
 #!/bin/bash
 
+#------------------------------------------------------------------------------
+# Functions
+#------------------------------------------------------------------------------
+
 function getComponent {
   [ "$1" == "EastWestGateway" ] && { echo IngressGateways; exit; }
-  echo $1
+  echo "$1"
 }
 
 function getConfig {
@@ -11,12 +15,12 @@ function getConfig {
 }
 
 function generate {
-  istioctl-$1 manifest generate \
-    --component $(getComponent $2) \
+  istioctl-"$1" manifest generate \
+    --component "$(getComponent "$2")" \
     -f ./config/iop-base.yaml \
     -f ./config/iop-cni.yaml \
     -f ./config/iop-pilot.yaml \
-    $(getConfig $2) |
+    "$(getConfig "$2")" |
   sed '
     s/cluster-XXXX/{{ .Values.cluster }}/g;
     s/domain-XXXX/{{ .Values.domain }}/g;
@@ -26,4 +30,12 @@ function generate {
   '
 }
 
-[ $# -eq 2 ] && generate "$@"
+#------------------------------------------------------------------------------
+# Generate yaml for the given version and component
+#------------------------------------------------------------------------------
+
+generate 1-16-0 Base > charts/base/templates/generated.yaml
+generate 1-16-0 Cni > charts/cni/templates/generated.yaml
+generate 1-16-0 Pilot > charts/pilot/templates/generated.yaml
+generate 1-16-0 IngressGateways > charts/igws/templates/generated.yaml
+generate 1-16-0 EastWestGateway > charts/ewgw/templates/generated.yaml
