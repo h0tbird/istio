@@ -22,6 +22,10 @@ spec:
     accessLogEncoding: JSON
     localityLbSetting:
       enabled: true
+      distribute:
+        - from: 'milky-way/solar-system/*'
+          to:
+            'milky-way/solar-system/*': 100
   values:
     istio_cni:
       enabled: true

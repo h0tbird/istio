@@ -1182,6 +1182,10 @@ data:
           address: zipkin.istio-system:9411
     enablePrometheusMerge: true
     localityLbSetting:
+      distribute:
+      - from: milky-way/solar-system/*
+        to:
+          milky-way/solar-system/*: 100
       enabled: true
     rootNamespace: istio-system
     trustDomain: cluster.local
