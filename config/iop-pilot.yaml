@@ -23,9 +23,9 @@ spec:
     localityLbSetting:
       enabled: true
       distribute:
-        - from: 'milky-way/solar-system/*'
+        - from: 'milky-way/solar-system/cluster-XXXX'
           to:
-            'milky-way/solar-system/*': 100
+            'milky-way/solar-system/cluster-XXXX': 100
   values:
     istio_cni:
       enabled: true

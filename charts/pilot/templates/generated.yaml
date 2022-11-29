@@ -1183,9 +1183,9 @@ data:
     enablePrometheusMerge: true
     localityLbSetting:
       distribute:
-      - from: milky-way/solar-system/*
+      - from: milky-way/solar-system/{{ .Values.cluster }}
         to:
-          milky-way/solar-system/*: 100
+          milky-way/solar-system/{{ .Values.cluster }}: 100
       enabled: true
     rootNamespace: istio-system
     trustDomain: cluster.local
