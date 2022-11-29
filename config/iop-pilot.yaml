@@ -20,6 +20,8 @@ spec:
   meshConfig:
     accessLogFile: /dev/stdout
     accessLogEncoding: JSON
+    localityLbSetting:
+      enabled: true
   values:
     istio_cni:
       enabled: true

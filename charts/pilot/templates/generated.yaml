@@ -1181,6 +1181,8 @@ data:
         zipkin:
           address: zipkin.istio-system:9411
     enablePrometheusMerge: true
+    localityLbSetting:
+      enabled: true
     rootNamespace: istio-system
     trustDomain: cluster.local
 ---
