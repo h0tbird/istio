@@ -22,10 +22,10 @@ spec:
     accessLogEncoding: JSON
     localityLbSetting:
       enabled: true
-      distribute:
-        - from: 'milky-way/solar-system/cluster-XXXX'
-          to:
-            'milky-way/solar-system/cluster-XXXX': 100
+      failoverPriority:
+        - "topology.kubernetes.io/region"
+        - "topology.kubernetes.io/zone"
+        - "topology.istio.io/subzone"
   values:
     istio_cni:
       enabled: true

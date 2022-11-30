@@ -1182,11 +1182,11 @@ data:
           address: zipkin.istio-system:9411
     enablePrometheusMerge: true
     localityLbSetting:
-      distribute:
-      - from: milky-way/solar-system/{{ .Values.cluster }}
-        to:
-          milky-way/solar-system/{{ .Values.cluster }}: 100
       enabled: true
+      failoverPriority:
+      - topology.kubernetes.io/region
+      - topology.kubernetes.io/zone
+      - topology.istio.io/subzone
     rootNamespace: istio-system
     trustDomain: cluster.local
 ---
