@@ -366,6 +366,8 @@ templates:
             - NET_BIND_SERVICE
             {{- end }}
             {{- end }}
+            add:
+            - SYS_PTRACE
             drop:
             - ALL
           privileged: {{ .Values.global.proxy.privileged }}
