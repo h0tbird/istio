@@ -1505,13 +1505,7 @@ spec:
           value: "false"
         - name: CLUSTER_ID
           value: {{ .Values.cluster }}
-        image: docker.io/istio/pilot:1.16.0
-        lifecycle:
-          preStop:
-            exec:
-              command:
-              - sleep
-              - "5"
+        image: docker.io/h0tbird/pilot:1.16.0
         name: discovery
         ports:
         - containerPort: 8080
