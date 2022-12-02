@@ -17,12 +17,6 @@ spec:
   meshConfig:
     accessLogFile: /dev/stdout
     accessLogEncoding: JSON
-    localityLbSetting:
-      enabled: true
-      failoverPriority:
-        - "topology.kubernetes.io/region"
-        - "topology.kubernetes.io/zone"
-        - "topology.istio.io/subzone"
   values:
     istio_cni:
       enabled: true

@@ -1181,12 +1181,6 @@ data:
         zipkin:
           address: zipkin.istio-system:9411
     enablePrometheusMerge: true
-    localityLbSetting:
-      enabled: true
-      failoverPriority:
-      - topology.kubernetes.io/region
-      - topology.kubernetes.io/zone
-      - topology.istio.io/subzone
     rootNamespace: istio-system
     trustDomain: cluster.local
 ---

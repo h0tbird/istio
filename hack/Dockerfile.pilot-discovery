@@ -7,9 +7,8 @@
 # docker buildx build --platform linux/amd64,linux/arm64 -t h0tbird/pilot:1.16.0 -f Dockerfile.pilot-discovery --push .
 
 # Debug:
-# k --context kube-01 -n httpbin exec -it deployments/sleep -c istio-proxy -- sudo bash -c 'echo 0 > /proc/sys/kernel/yama/ptrace_scope'
-# k --context kube-01 -n httpbin exec -it deployments/sleep -c istio-proxy -- dlv dap --listen=:40000 --log=true
-# k --context kube-01 -n httpbin port-forward deployments/sleep 40000:40000
+# k --context kube-01 -n istio-system exec -it deployments/istiod-1-16-0 -- dlv dap --listen=:40000 --log=true
+# k --context kube-01 -n istio-system port-forward deployments/istiod-1-16-0 40000:40000
 
 #------------------------------------------------------------------------------
 #
