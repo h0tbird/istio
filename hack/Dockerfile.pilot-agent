@@ -1,9 +1,10 @@
+# git checkout -b 1.16.0 1.16.0
+# git cherry-pick 56e2870c80^..9536b265c4
+
 # Single arch:
-# git checkout 1.16.0
 # docker build -t h0tbird/proxyv2:1.16.0 -f Dockerfile.pilot-agent .
 
 # Multi arch:
-# git checkout 1.16.0
 # docker buildx build --platform linux/amd64,linux/arm64 -t h0tbird/proxyv2:1.16.0 -f Dockerfile.pilot-agent --push .
 
 # Debug:
@@ -52,8 +53,8 @@ RUN go install github.com/go-delve/delve/cmd/dlv@latest
 FROM istio/proxyv2:1.16.0
 
 # Install tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    file && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     file && rm -rf /var/lib/apt/lists/*
 
 # Copy binaries and source code
 COPY --from=builder /go/bin/dlv /usr/local/bin/dlv
