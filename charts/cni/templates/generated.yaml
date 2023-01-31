@@ -163,7 +163,7 @@ spec:
         # This container installs the Istio CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
-          image: "docker.io/istio/install-cni:1.16.0"
+          image: "docker.io/istio/install-cni:1.16.2"
           imagePullPolicy: IfNotPresent
           readinessProbe:
             httpGet:

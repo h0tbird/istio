@@ -7,13 +7,13 @@ spec:
       enabled: true
       k8s:
         replicaCount: 1
-        overlays:
-        - apiVersion: apps/v1
-          kind: Deployment
-          name: istiod-revision-XXXX
-          patches:
-          - path: spec.template.spec.containers[0].image
-            value: docker.io/h0tbird/pilot:1.16.0
+        # overlays:
+        # - apiVersion: apps/v1
+        #   kind: Deployment
+        #   name: istiod-revision-XXXX
+        #   patches:
+        #   - path: spec.template.spec.containers[0].image
+        #     value: docker.io/h0tbird/pilot:1.16.0
   meshConfig:
     accessLogFile: /dev/stdout
     accessLogEncoding: JSON
