@@ -16,7 +16,7 @@ spec:
       - "*"
     route:
     - destination:
-        host: istiod-1-16-2.istio-system.svc.cluster.local
+        host: istiod-1-17-0.istio-system.svc.cluster.local
         port:
           number: 15012
   - match:
@@ -25,6 +25,6 @@ spec:
       - "*"
     route:
     - destination:
-        host: istiod-1-16-2.istio-system.svc.cluster.local
+        host: istiod-1-17-0.istio-system.svc.cluster.local
         port:
           number: 443

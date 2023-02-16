@@ -172,6 +172,9 @@ rules:
   - apiGroups: [""]
     verbs: [ "get", "watch", "list", "update", "patch", "create", "delete" ]
     resources: [ "services" ]
+  - apiGroups: [""]
+    verbs: [ "get", "watch", "list", "update", "patch", "create", "delete" ]
+    resources: [ "serviceaccounts"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -729,6 +732,81 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
+  name: stats-filter-1.17-{{ .Values.revision }}
+  namespace: istio-system
+  labels:
+    istio.io/rev: {{ .Values.revision }}
+spec:
+  priority: -1
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        proxy:
+          proxyVersion: '^1\.17.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.http_connection_manager"
+              subFilter:
+                name: "envoy.filters.http.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: istio.stats
+          typed_config:
+            "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+            type_url: type.googleapis.com/stats.PluginConfig
+            value:
+              {}
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        proxy:
+          proxyVersion: '^1\.17.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.http_connection_manager"
+              subFilter:
+                name: "envoy.filters.http.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: istio.stats
+          typed_config:
+            "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+            type_url: type.googleapis.com/stats.PluginConfig
+            value:
+              {
+                "disable_host_header_fallback": true
+              }
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: '^1\.17.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.http_connection_manager"
+              subFilter:
+                name: "envoy.filters.http.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: istio.stats
+          typed_config:
+            "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+            type_url: type.googleapis.com/stats.PluginConfig
+            value:
+              {
+                "disable_host_header_fallback": true
+              }
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
   name: tcp-stats-filter-1.13-{{ .Values.revision }}
   namespace: istio-system
   labels:
@@ -1154,6 +1232,71 @@ spec:
                     local:
                       inline_string: "envoy.wasm.stats"
 ---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: tcp-stats-filter-1.17-{{ .Values.revision }}
+  namespace: istio-system
+  labels:
+    istio.io/rev: {{ .Values.revision }}
+spec:
+  priority: -1
+  configPatches:
+    - applyTo: NETWORK_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        proxy:
+          proxyVersion: '^1\.17.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.tcp_proxy"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: istio.stats
+          typed_config:
+            "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+            type_url: type.googleapis.com/stats.PluginConfig
+            value:
+              {}
+    - applyTo: NETWORK_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        proxy:
+          proxyVersion: '^1\.17.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.tcp_proxy"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: istio.stats
+          typed_config:
+            "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+            type_url: type.googleapis.com/stats.PluginConfig
+            value:
+              {}
+    - applyTo: NETWORK_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: '^1\.17.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.filters.network.tcp_proxy"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: istio.stats
+          typed_config:
+            "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+            type_url: type.googleapis.com/stats.PluginConfig
+            value:
+              {}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1202,6 +1345,7 @@ data:
         "autoscalingv2API": true,
         "caAddress": "",
         "caName": "",
+        "certSigners": [],
         "configCluster": false,
         "configValidation": true,
         "defaultNodeSelector": {},
@@ -1294,7 +1438,7 @@ data:
         "sts": {
           "servicePort": 0
         },
-        "tag": "1.16.2",
+        "tag": "1.17.0",
         "tracer": {
           "datadog": {
             "address": "$(HOST_IP):8126"
@@ -1499,7 +1643,7 @@ spec:
           value: "false"
         - name: CLUSTER_ID
           value: {{ .Values.cluster }}
-        image: docker.io/istio/pilot:1.16.2
+        image: docker.io/istio/pilot:1.17.0
         name: discovery
         ports:
         - containerPort: 8080
