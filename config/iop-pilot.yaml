@@ -21,6 +21,7 @@ spec:
       proxyMetadata:
         ISTIO_META_DNS_CAPTURE: "true"
         ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+        holdApplicationUntilProxyStarts: "true"
   values:
     istio_cni:
       enabled: true
