@@ -1319,7 +1319,9 @@ data:
     defaultConfig:
       discoveryAddress: istiod-{{ .Values.revision }}.istio-system.svc:15012
       meshId: {{ .Values.mesh }}
-      proxyMetadata: {}
+      proxyMetadata:
+        ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+        ISTIO_META_DNS_CAPTURE: "true"
       tracing:
         zipkin:
           address: zipkin.istio-system:9411
