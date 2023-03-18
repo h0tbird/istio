@@ -106,7 +106,7 @@ data:
           "log_uds_address": "__LOG_UDS_ADDRESS__", 
           "kubernetes": {
               "kubeconfig": "__KUBECONFIG_FILEPATH__",
-              "cni_bin_dir": "/opt/cni/bin",
+              "cni_bin_dir": "/var/lib/rancher/k3s/data/current/bin",
               "exclude_namespaces": [ "istio-system", "kube-system" ]
           }
         }
@@ -186,7 +186,7 @@ spec:
                   name: istio-cni-config
                   key: cni_network_config
             - name: CNI_NET_DIR
-              value: /etc/cni/net.d
+              value: /var/lib/rancher/k3s/agent/etc/cni/net.d
             # Deploy as a standalone CNI plugin or as chained?
             - name: CHAINED_CNI_PLUGIN
               value: "true"
@@ -226,10 +226,10 @@ spec:
         # Used to install CNI.
         - name: cni-bin-dir
           hostPath:
-            path: /opt/cni/bin
+            path: /var/lib/rancher/k3s/data/current/bin
         - name: cni-net-dir
           hostPath:
-            path: /etc/cni/net.d
+            path: /var/lib/rancher/k3s/agent/etc/cni/net.d
         # Used for UDS log
         - name: cni-log-dir
           hostPath:
