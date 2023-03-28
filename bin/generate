@@ -27,6 +27,7 @@ function generate {
     s/network-XXXX/{{ .Values.network }}/g;
     s/mesh-XXXX/{{ .Values.mesh }}/g;
     s/revision-XXXX/{{ .Values.revision }}/g;
+    s/trustDomain-XXXX/{{ .Values.trustDomain }}/g;
   '
 }
 

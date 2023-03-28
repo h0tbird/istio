@@ -4,3 +4,4 @@ network: network1
 cluster: kube-01
 domain: cluster.local
 revision: 1-17-1
+trustDomain: red-balloon.local
