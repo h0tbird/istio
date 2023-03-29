@@ -4,6 +4,8 @@ kind: Issuer
 metadata:
   name: vault-ica
   namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   vault:
     path: stamp/{{.Values.stampName}}/root/sign-intermediate

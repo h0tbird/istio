@@ -4,6 +4,8 @@ kind: Certificate
 metadata:
   name: istio-cluster-ica
   namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   secretName: cacerts
   commonName: {{.Values.clusterName}}
