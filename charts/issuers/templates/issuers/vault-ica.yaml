@@ -8,7 +8,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   vault:
-    path: stamp/{{.Values.stampName}}/root/sign-intermediate
+    path: mesh/root/sign-intermediate
     server: http://vault.demo.lab:8200
     auth:
       appRole:

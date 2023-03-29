@@ -1,5 +1,4 @@
 ---
 clusterName: cluster1
-stampName: stamp1
 roleID: dummy
 secretID: ZHVtbXk=
