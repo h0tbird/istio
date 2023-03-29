@@ -1,0 +1,18 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingressgateway
+  namespace: istio-system
+spec:
+  secretName: istio-ingressgateway-certs
+  commonName: istio-{{.Values.clusterName}}-ingressgateway
+  duration: 43800h
+  renewBefore: 8760h
+  dnsNames:
+  - "*.demo.lab"
+  privateKey:
+    rotationPolicy: Always
+  issuerRef:
+    name: ingress-ca
+    kind: Issuer

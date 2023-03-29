@@ -1,0 +1,17 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: vault-ica
+  namespace: istio-system
+spec:
+  vault:
+    path: stamp/{{.Values.stampName}}/root/sign-intermediate
+    server: http://vault.demo.lab:8200
+    auth:
+      appRole:
+        path: approle
+        roleId: {{.Values.roleID}}
+        secretRef:
+          name: vault-ica-approle
+          key: secretId
