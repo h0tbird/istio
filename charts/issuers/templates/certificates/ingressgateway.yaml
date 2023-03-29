@@ -7,8 +7,8 @@ metadata:
 spec:
   secretName: istio-ingressgateway-certs
   commonName: istio-{{.Values.clusterName}}-ingressgateway
-  duration: 43800h
-  renewBefore: 8760h
+  duration: 43800h0m0s
+  renewBefore: 8760h0m0s
   dnsNames:
   - "*.demo.lab"
   privateKey:
