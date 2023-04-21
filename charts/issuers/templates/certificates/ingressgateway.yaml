@@ -17,4 +17,5 @@ spec:
     rotationPolicy: Always
   issuerRef:
     name: ingress-ca
-    kind: Issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

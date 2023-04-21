@@ -1,9 +1,8 @@
 ---
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: ingress-ca
-  namespace: istio-system
   annotations:
     argocd.argoproj.io/sync-wave: "4"
 spec:
