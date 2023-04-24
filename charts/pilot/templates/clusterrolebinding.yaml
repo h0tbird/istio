@@ -5,7 +5,7 @@ metadata:
   name: istio-secrets-reader-binding
 subjects:
 - kind: ServiceAccount
-  name: istio-ingressgateway-service-account
+  name: istiod-{{ .Values.revision }}
   namespace: istio-system
 roleRef:
   kind: ClusterRole
