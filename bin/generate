@@ -35,11 +35,11 @@ function generate {
 # Generate yaml for the given version and component
 #------------------------------------------------------------------------------
 
-generate 1-17-1 Base > charts/base/templates/generated.yaml
-generate 1-17-1 Cni > charts/cni/templates/generated.yaml
-generate 1-17-1 Pilot > charts/pilot/templates/generated.yaml
-generate 1-17-1 IngressGateways > charts/igws/templates/generated.yaml
-generate 1-17-1 EastWestGateway > charts/ewgw/templates/generated.yaml
+generate 1-17-2 Base > charts/base/templates/generated.yaml
+generate 1-17-2 Cni > charts/cni/templates/generated.yaml
+generate 1-17-2 Pilot > charts/pilot/templates/generated.yaml
+generate 1-17-2 IngressGateways > charts/igws/templates/generated.yaml
+generate 1-17-2 EastWestGateway > charts/ewgw/templates/generated.yaml
 
 #------------------------------------------------------------------------------
 # Extract the side-car injector config from the pilot generated yaml
