@@ -75,6 +75,8 @@ spec:
           protocol: TCP
         - containerPort: 8443
           protocol: TCP
+        - containerPort: 31400
+          protocol: TCP
         - containerPort: 15090
           name: http-envoy-prom
           protocol: TCP
@@ -163,35 +165,36 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
-  name: istio-ingressgateway
-  namespace: istio-system
-  annotations:
+  annotations: null
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
     install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "IngressGateways"
+    istio: ingressgateway
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: IngressGateways
+    release: istio
+  name: istio-ingressgateway
+  namespace: istio-system
 spec:
-  type: LoadBalancer
+  ports:
+  - name: status-port
+    port: 15021
+    protocol: TCP
+    targetPort: 15021
+  - name: http2
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 8443
+  - name: echo
+    port: 31400
+    protocol: TCP
+    targetPort: 31400
   selector:
     app: istio-ingressgateway
     istio: ingressgateway
-  ports:
-    -
-      name: status-port
-      port: 15021
-      protocol: TCP
-      targetPort: 15021
-    -
-      name: http2
-      port: 80
-      protocol: TCP
-      targetPort: 8080
-    -
-      name: https
-      port: 443
-      protocol: TCP
-      targetPort: 8443
+  type: LoadBalancer
 ---

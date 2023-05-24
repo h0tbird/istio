@@ -10,8 +10,21 @@ spec:
         replicaCount: 1
         service:
           ports:
-          - port: 31400
-            name: echo
+          - name: status-port
+            port: 15021
+            protocol: TCP
+            targetPort: 15021
+          - name: http2
+            port: 80
+            protocol: TCP
+            targetPort: 8080
+          - name: https
+            port: 443
+            protocol: TCP
+            targetPort: 8443
+          - name: echo
+            port: 31400
+            protocol: TCP
             targetPort: 31400
         overlays:
         - apiVersion: apps/v1
