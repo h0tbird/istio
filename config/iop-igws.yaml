@@ -23,9 +23,9 @@ spec:
             protocol: TCP
             targetPort: 8443
           - name: echo
-            port: 31400
+            port: 70
             protocol: TCP
-            targetPort: 31400
+            targetPort: 7070
         overlays:
         - apiVersion: apps/v1
           kind: Deployment

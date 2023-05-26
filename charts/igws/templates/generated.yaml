@@ -75,7 +75,7 @@ spec:
           protocol: TCP
         - containerPort: 8443
           protocol: TCP
-        - containerPort: 31400
+        - containerPort: 7070
           protocol: TCP
         - containerPort: 15090
           name: http-envoy-prom
@@ -190,9 +190,9 @@ spec:
     protocol: TCP
     targetPort: 8443
   - name: echo
-    port: 31400
+    port: 70
     protocol: TCP
-    targetPort: 31400
+    targetPort: 7070
   selector:
     app: istio-ingressgateway
     istio: ingressgateway
