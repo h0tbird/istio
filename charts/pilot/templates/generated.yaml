@@ -1441,7 +1441,7 @@ data:
         "sts": {
           "servicePort": 0
         },
-        "tag": "1.17.2",
+        "tag": "1.17.3",
         "tracer": {
           "datadog": {
             "address": "$(HOST_IP):8126"
@@ -1648,7 +1648,7 @@ spec:
           value: "false"
         - name: CLUSTER_ID
           value: {{ .Values.cluster }}
-        image: docker.io/istio/pilot:1.17.2
+        image: docker.io/istio/pilot:1.17.3
         name: discovery
         ports:
         - containerPort: 8080
