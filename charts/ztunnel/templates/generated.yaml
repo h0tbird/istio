@@ -49,10 +49,6 @@ spec:
       containers:
       - name: istio-proxy
         image: "docker.io/istio/ztunnel:1.18.0"
-        resources:
-          requests:
-            cpu: 500m
-            memory: 2048Mi
         securityContext:
           allowPrivilegeEscalation: false
           privileged: false
