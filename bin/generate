@@ -23,6 +23,7 @@ function generate {
     -f "${ROOT}"/config/iop-base.yaml \
     -f "${ROOT}"/config/iop-cni.yaml \
     -f "${ROOT}"/config/iop-pilot.yaml \
+    -f "${ROOT}"/config/iop-ztunnel.yaml \
     "$(getConfig "$2")" |
   sed '
     s/cluster-XXXX/{{ .Values.cluster }}/g;
@@ -44,6 +45,7 @@ generate "${VERSION}" Cni > charts/cni/templates/generated.yaml
 generate "${VERSION}" Pilot > charts/pilot/templates/generated.yaml
 generate "${VERSION}" IngressGateways > charts/igws/templates/generated.yaml
 generate "${VERSION}" EastWestGateway > charts/ewgw/templates/generated.yaml
+generate "${VERSION}" Ztunnel > charts/ztunnel/templates/generated.yaml
 
 #------------------------------------------------------------------------------
 # Extract the side-car injector config from the pilot generated yaml

@@ -99,9 +99,9 @@ data:
           "cniVersion": "0.3.1",
           "name": "istio-cni",
           "type": "istio-cni",
-          "log_level": "debug",
+          "log_level": "info",
           "log_uds_address": "__LOG_UDS_ADDRESS__",
-          
+          "ambient_enabled": true,
           "kubernetes": {
               "kubeconfig": "__KUBECONFIG_FILEPATH__",
               "cni_bin_dir": "/var/lib/rancher/k3s/data/current/bin",
@@ -142,7 +142,7 @@ spec:
         prometheus.io/path: '/metrics'
         # Custom annotations
     spec:
-      
+      hostNetwork: true
       nodeSelector:
         kubernetes.io/os: linux
       # Can be configured to allow for excluding instio-cni from being scheduled on specified nodes
@@ -174,7 +174,7 @@ spec:
             runAsGroup: 0
             runAsUser: 0
             runAsNonRoot: false
-            privileged: false
+            privileged: true
           command: ["install-cni"]
           args:
             - --log_output_level=default:info
@@ -218,7 +218,9 @@ spec:
                   apiVersion: v1
                   fieldPath: spec.nodeName
             - name: LOG_LEVEL
-              value: "debug"
+              value: "info"
+            - name: AMBIENT_ENABLED
+              value: "true"
           volumeMounts:
             - mountPath: /host/opt/cni/bin
               name: cni-bin-dir
@@ -226,6 +228,12 @@ spec:
               name: cni-net-dir
             - mountPath: /var/run/istio-cni
               name: cni-log-dir
+            - mountPath: /etc/ambient-config
+              name: cni-ambientconfig
+            - mountPath: /var/run/netns
+              mountPropagation: HostToContainer
+              name: cni-netns-dir
+            
           resources:
             requests:
               cpu: 100m
@@ -235,6 +243,9 @@ spec:
         - name: cni-bin-dir
           hostPath:
             path: /var/lib/rancher/k3s/data/current/bin
+        - name: cni-ambientconfig
+          hostPath:
+            path: /etc/ambient-config
         - name: cni-net-dir
           hostPath:
             path: /var/lib/rancher/k3s/agent/etc/cni/net.d

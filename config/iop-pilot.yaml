@@ -7,13 +7,6 @@ spec:
       enabled: true
       k8s:
         replicaCount: 1
-        # overlays:
-        # - apiVersion: apps/v1
-        #   kind: Deployment
-        #   name: istiod-revision-XXXX
-        #   patches:
-        #   - path: spec.template.spec.containers[0].image
-        #     value: docker.io/h0tbird/pilot:1.16.0
   meshConfig:
     accessLogFile: /dev/stdout
     accessLogEncoding: JSON
@@ -22,6 +15,7 @@ spec:
       proxyMetadata:
         ISTIO_META_DNS_CAPTURE: "true"
         ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+        ISTIO_META_ENABLE_HBONE: "true"
     trustDomain: trustDomain-XXXX
   values:
     istio_cni:
@@ -29,7 +23,12 @@ spec:
     pilot:
       autoscaleEnabled: false
       env:
+        VERIFY_CERTIFICATE_AT_CLIENT: true
+        ENABLE_AUTO_SNI: true
         AUTO_RELOAD_PLUGIN_CERTS: true
+        PILOT_ENABLE_HBONE: true
         PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION: true
         PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS: true
+        PILOT_ENABLE_AMBIENT_CONTROLLERS: true
+        CA_TRUSTED_NODE_ACCOUNTS: "istio-system/ztunnel,kube-system/ztunnel"
         ISTIOD_CUSTOM_HOST: istiod.cluster-XXXX
