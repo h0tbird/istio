@@ -5,3 +5,9 @@ spec:
   components:
     ztunnel:
       enabled: true
+      k8s:
+        env:
+          - name: XDS_ADDRESS
+            value: https://istiod-revision-XXXX.istio-system.svc:15012
+          - name: CA_ADDRESS
+            value: https://istiod-revision-XXXX.istio-system.svc:15012
