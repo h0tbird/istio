@@ -11,64 +11,35 @@ metadata:
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
+  annotations: {}
+  labels: {}
   name: ztunnel
   namespace: istio-system
-  labels:
-    {}
-  annotations:
-    {}
 spec:
-  updateStrategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   selector:
     matchLabels:
       app: ztunnel
   template:
     metadata:
-      labels:
-        sidecar.istio.io/inject: "false"
-        app: ztunnel
-
       annotations:
-        cni.projectcalico.org/allowedSourcePrefixes: "[\"0.0.0.0/0\"]"
         ambient.istio.io/redirection: disabled
-        sidecar.istio.io/inject: "false"
+        cni.projectcalico.org/allowedSourcePrefixes: '["0.0.0.0/0"]'
         prometheus.io/port: "15020"
         prometheus.io/scrape: "true"
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: ztunnel
+        sidecar.istio.io/inject: "false"
     spec:
-      serviceAccountName: ztunnel
-      tolerations:
-        - effect: NoSchedule
-          operator: Exists
-        - key: CriticalAddonsOnly
-          operator: Exists
-        - effect: NoExecute
-          operator: Exists
       containers:
-      - name: istio-proxy
-        image: "docker.io/istio/ztunnel:1.18.0"
-        securityContext:
-          allowPrivilegeEscalation: false
-          privileged: false
-          capabilities:
-            drop:
-            - ALL
-            add:
-            - NET_ADMIN
-          readOnlyRootFilesystem: true
-          runAsGroup: 1337
-          runAsNonRoot: false
-          runAsUser: 0
-        readinessProbe:
-          httpGet:
-            port: 15021
-            path: /healthz/ready
-        args:
+      - args:
         - proxy
         - ztunnel
         env:
+        - name: XDS_ADDRESS
+          value: https://istiod-{{ .Values.revision }}.istio-system.svc:15012
+        - name: CA_ADDRESS
+          value: https://istiod-{{ .Values.revision }}.istio-system.svc:15012
         - name: CLUSTER_ID
           value: {{ .Values.cluster }}
         - name: POD_NAME
@@ -91,20 +62,54 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.serviceAccountName
+        image: docker.io/istio/ztunnel:1.18.0
+        name: istio-proxy
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: 15021
+        resources:
+          requests:
+            cpu: 500m
+            memory: 2048Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+            - NET_ADMIN
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 1337
+          runAsNonRoot: false
+          runAsUser: 0
         volumeMounts:
         - mountPath: /var/run/secrets/istio
           name: istiod-ca-cert
         - mountPath: /var/run/secrets/tokens
           name: istio-token
+      serviceAccountName: ztunnel
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
       volumes:
       - name: istio-token
         projected:
           sources:
           - serviceAccountToken:
-              path: istio-token
-              expirationSeconds: 43200
               audience: istio-ca
-      - name: istiod-ca-cert
-        configMap:
+              expirationSeconds: 43200
+              path: istio-token
+      - configMap:
           name: istio-ca-root-cert
+        name: istiod-ca-cert
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 ---
