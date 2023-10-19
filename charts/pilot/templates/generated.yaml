@@ -283,6 +283,7 @@ data:
       proxyMetadata:
         ISTIO_META_DNS_AUTO_ALLOCATE: "true"
         ISTIO_META_DNS_CAPTURE: "true"
+        ISTIO_META_ENABLE_HBONE: "true"
       tracing:
         zipkin:
           address: zipkin.istio-system:9411
@@ -571,11 +572,21 @@ spec:
           value: /var/run/secrets/remote/config
         - name: AUTO_RELOAD_PLUGIN_CERTS
           value: "true"
+        - name: CA_TRUSTED_NODE_ACCOUNTS
+          value: istio-system/ztunnel,kube-system/ztunnel
+        - name: ENABLE_AUTO_SNI
+          value: "true"
         - name: ISTIOD_CUSTOM_HOST
           value: istiod.{{ .Values.cluster }}
+        - name: PILOT_ENABLE_AMBIENT_CONTROLLERS
+          value: "true"
+        - name: PILOT_ENABLE_HBONE
+          value: "true"
         - name: PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION
           value: "true"
         - name: PILOT_ENABLE_WORKLOAD_ENTRY_HEALTHCHECKS
+          value: "true"
+        - name: VERIFY_CERTIFICATE_AT_CLIENT
           value: "true"
         - name: PILOT_TRACE_SAMPLING
           value: "1"
