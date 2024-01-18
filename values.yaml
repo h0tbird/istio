@@ -3,5 +3,5 @@ mesh: mesh1
 network: network1
 cluster: cluster1
 domain: cluster.local
-revision: 1-18-2
+revision: 1-19-6
 trustDomain: cluster.local

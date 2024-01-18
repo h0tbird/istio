@@ -1,58 +1,83 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  labels:
+    app: istio-cni
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Cni
+    release: istio
   name: istio-cni
   namespace: istio-system
-  labels:
-    app: istio-cni
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Cni"
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  labels:
+    app: istio-cni
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Cni
+    release: istio
   name: istio-cni
-  labels:
-    app: istio-cni
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Cni"
 rules:
-- apiGroups: [""]
-  resources: ["pods","nodes","namespaces"]
-  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - nodes
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: istio-cni-repair-role
   labels:
     app: istio-cni
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
     install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Cni"
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Cni
+    release: istio
+  name: istio-cni-repair-role
 rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch", "delete", "patch", "update" ]
-- apiGroups: [""]
-  resources: ["events"]
-  verbs: ["get", "list", "watch", "delete", "patch", "update", "create" ]
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - watch
+  - get
+  - list
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - delete
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: istio-cni
   labels:
     app: istio-cni
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
     install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Cni"
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Cni
+    release: istio
+  name: istio-cni
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -61,188 +86,177 @@ subjects:
 - kind: ServiceAccount
   name: istio-cni
   namespace: istio-system
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: istio-cni-repair-rolebinding
   labels:
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
     k8s-app: istio-cni-repair
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Cni"
-subjects:
-- kind: ServiceAccount
-  name: istio-cni
-  namespace: istio-system
+    operator.istio.io/component: Cni
+  name: istio-cni-repair-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: istio-cni-repair-role
+subjects:
+- kind: ServiceAccount
+  name: istio-cni
+  namespace: istio-system
+
 ---
-kind: ConfigMap
 apiVersion: v1
+data:
+  cni_network_config: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"istio-cni\",\n
+    \ \"type\": \"istio-cni\",\n  \"log_level\": \"debug\",\n  \"log_uds_address\":
+    \"__LOG_UDS_ADDRESS__\",\n  \n  \"kubernetes\": {\n      \"kubeconfig\": \"__KUBECONFIG_FILEPATH__\",\n
+    \     \"cni_bin_dir\": \"/var/lib/rancher/k3s/data/current/bin\",\n      \"exclude_namespaces\":
+    [ \"istio-system\", \"kube-system\" ]\n  }\n}"
+kind: ConfigMap
 metadata:
+  labels:
+    app: istio-cni
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Cni
+    release: istio
   name: istio-cni-config
   namespace: istio-system
-  labels:
-    app: istio-cni
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Cni"
-data:
-  # The CNI network configuration to add to the plugin chain on each node.  The special
-  # values in this config will be automatically populated.
-  cni_network_config: |-
-        {
-          "cniVersion": "0.3.1",
-          "name": "istio-cni",
-          "type": "istio-cni",
-          "log_level": "debug",
-          "log_uds_address": "__LOG_UDS_ADDRESS__",
-          
-          "kubernetes": {
-              "kubeconfig": "__KUBECONFIG_FILEPATH__",
-              "cni_bin_dir": "/var/lib/rancher/k3s/data/current/bin",
-              "exclude_namespaces": [ "istio-system", "kube-system" ]
-          }
-        }
+
 ---
-kind: DaemonSet
 apiVersion: apps/v1
+kind: DaemonSet
 metadata:
+  labels:
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
+    k8s-app: istio-cni-node
+    operator.istio.io/component: Cni
+    release: istio
   name: istio-cni-node
   namespace: istio-system
-  labels:
-    k8s-app: istio-cni-node
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Cni"
 spec:
   selector:
     matchLabels:
       k8s-app: istio-cni-node
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
   template:
     metadata:
+      annotations:
+        ambient.istio.io/redirection: disabled
+        prometheus.io/path: /metrics
+        prometheus.io/port: "15014"
+        prometheus.io/scrape: "true"
+        sidecar.istio.io/inject: "false"
       labels:
         k8s-app: istio-cni-node
         sidecar.istio.io/inject: "false"
-      annotations:
-        sidecar.istio.io/inject: "false"
-        ambient.istio.io/redirection: disabled
-        # Add Prometheus Scrape annotations
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: "15014"
-        prometheus.io/path: '/metrics'
-        # Custom annotations
     spec:
-      
+      containers:
+      - args:
+        - --log_output_level=default:info
+        - --log_as_json
+        command:
+        - install-cni
+        env:
+        - name: CNI_NETWORK_CONFIG
+          valueFrom:
+            configMapKeyRef:
+              key: cni_network_config
+              name: istio-cni-config
+        - name: CNI_NET_DIR
+          value: /var/lib/rancher/k3s/agent/etc/cni/net.d
+        - name: CHAINED_CNI_PLUGIN
+          value: "true"
+        - name: REPAIR_ENABLED
+          value: "true"
+        - name: REPAIR_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: REPAIR_LABEL_PODS
+          value: "false"
+        - name: REPAIR_DELETE_PODS
+          value: "true"
+        - name: REPAIR_REPAIR_PODS
+          value: "false"
+        - name: REPAIR_RUN_AS_DAEMON
+          value: "true"
+        - name: REPAIR_SIDECAR_ANNOTATION
+          value: sidecar.istio.io/status
+        - name: REPAIR_INIT_CONTAINER_NAME
+          value: istio-validation
+        - name: REPAIR_BROKEN_POD_LABEL_KEY
+          value: cni.istio.io/uninitialized
+        - name: REPAIR_BROKEN_POD_LABEL_VALUE
+          value: "true"
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        - name: LOG_LEVEL
+          value: debug
+        - name: GOMEMLIMIT
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+        - name: GOMAXPROCS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        image: docker.io/istio/install-cni:1.19.6
+        imagePullPolicy: IfNotPresent
+        name: install-cni
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        securityContext:
+          privileged: false
+          runAsGroup: 0
+          runAsNonRoot: false
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /host/opt/cni/bin
+          name: cni-bin-dir
+        - mountPath: /host/etc/cni/net.d
+          name: cni-net-dir
+        - mountPath: /var/run/istio-cni
+          name: cni-log-dir
       nodeSelector:
         kubernetes.io/os: linux
-      # Can be configured to allow for excluding instio-cni from being scheduled on specified nodes
-      tolerations:
-        # Make sure istio-cni-node gets scheduled on all nodes.
-        - effect: NoSchedule
-          operator: Exists
-        # Mark the pod as a critical add-on for rescheduling.
-        - key: CriticalAddonsOnly
-          operator: Exists
-        - effect: NoExecute
-          operator: Exists
       priorityClassName: system-node-critical
       serviceAccountName: istio-cni
-      # Minimize downtime during a rolling upgrade or deletion; tell Kubernetes to do a "force
-      # deletion": https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods.
       terminationGracePeriodSeconds: 5
-      containers:
-        # This container installs the Istio CNI binaries
-        # and CNI network config file on each node.
-        - name: install-cni
-          image: "docker.io/istio/install-cni:1.18.2"
-          imagePullPolicy: IfNotPresent
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: 8000
-          securityContext:
-            runAsGroup: 0
-            runAsUser: 0
-            runAsNonRoot: false
-            privileged: false
-          command: ["install-cni"]
-          args:
-            - --log_output_level=default:info
-            - --log_as_json
-          env:
-            # The CNI network config to install on each node.
-            - name: CNI_NETWORK_CONFIG
-              valueFrom:
-                configMapKeyRef:
-                  name: istio-cni-config
-                  key: cni_network_config
-            - name: CNI_NET_DIR
-              value: /var/lib/rancher/k3s/agent/etc/cni/net.d
-            # Deploy as a standalone CNI plugin or as chained?
-            - name: CHAINED_CNI_PLUGIN
-              value: "true"
-            - name: REPAIR_ENABLED
-              value: "true"
-            - name: REPAIR_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-            - name: REPAIR_LABEL_PODS
-              value: "true"
-            # Set to true to enable pod deletion
-            - name: REPAIR_DELETE_PODS
-              value: "true"
-            - name: REPAIR_RUN_AS_DAEMON
-              value: "true"
-            - name: REPAIR_SIDECAR_ANNOTATION
-              value: "sidecar.istio.io/status"
-            - name: REPAIR_INIT_CONTAINER_NAME
-              value: "istio-validation"
-            - name: REPAIR_BROKEN_POD_LABEL_KEY
-              value: "cni.istio.io/uninitialized"
-            - name: REPAIR_BROKEN_POD_LABEL_VALUE
-              value: "true"
-            - name: NODE_NAME
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.nodeName
-            - name: LOG_LEVEL
-              value: "debug"
-          volumeMounts:
-            - mountPath: /host/opt/cni/bin
-              name: cni-bin-dir
-            - mountPath: /host/etc/cni/net.d
-              name: cni-net-dir
-            - mountPath: /var/run/istio-cni
-              name: cni-log-dir
-          resources:
-            requests:
-              cpu: 100m
-              memory: 100Mi
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
       volumes:
-        # Used to install CNI.
-        - name: cni-bin-dir
-          hostPath:
-            path: /var/lib/rancher/k3s/data/current/bin
-        - name: cni-net-dir
-          hostPath:
-            path: /var/lib/rancher/k3s/agent/etc/cni/net.d
-        # Used for UDS log
-        - name: cni-log-dir
-          hostPath:
-            path: /var/run/istio-cni
-        - name: cni-netns-dir
-          hostPath:
-            path: /var/run/netns
+      - hostPath:
+          path: /var/lib/rancher/k3s/data/current/bin
+        name: cni-bin-dir
+      - hostPath:
+          path: /var/lib/rancher/k3s/agent/etc/cni/net.d
+        name: cni-net-dir
+      - hostPath:
+          path: /var/run/istio-cni
+        name: cni-log-dir
+      - hostPath:
+          path: /var/run/netns
+        name: cni-netns-dir
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+
 ---
