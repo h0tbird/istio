@@ -16,7 +16,7 @@ spec:
       - "*"
     route:
     - destination:
-        host: istiod-1-18-2.istio-system.svc.{{ .Values.domain }}
+        host: istiod-1-19-6.istio-system.svc.{{ .Values.domain }}
         port:
           number: 15012
   - match:
@@ -25,6 +25,6 @@ spec:
       - "*"
     route:
     - destination:
-        host: istiod-1-18-2.istio-system.svc.{{ .Values.domain }}
+        host: istiod-1-19-6.istio-system.svc.{{ .Values.domain }}
         port:
           number: 443
