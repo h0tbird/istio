@@ -3,4 +3,4 @@ name: istio-pilot
 description: Istio Pilot
 type: application
 version: 0.1.0
-appVersion: "1.14.1"
+appVersion: "1.19.6"
