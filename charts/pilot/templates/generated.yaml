@@ -1,208 +1,391 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  labels:
+    app: istiod
+    release: istio
   name: istiod-{{ .Values.revision }}
   namespace: istio-system
-  labels:
-    app: istiod
-    release: istio
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: istio-reader-clusterrole-{{ .Values.revision }}-istio-system
   labels:
     app: istio-reader
     release: istio
+  name: istio-reader-clusterrole-{{ .Values.revision }}-istio-system
 rules:
-  - apiGroups:
-      - "config.istio.io"
-      - "security.istio.io"
-      - "networking.istio.io"
-      - "authentication.istio.io"
-      - "rbac.istio.io"
-    resources: ["*"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: [""]
-    resources: ["endpoints", "pods", "services", "nodes", "replicationcontrollers", "namespaces", "secrets"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["networking.istio.io"]
-    verbs: [ "get", "watch", "list" ]
-    resources: [ "workloadentries" ]
-  - apiGroups: ["apiextensions.k8s.io"]
-    resources: ["customresourcedefinitions"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["discovery.k8s.io"]
-    resources: ["endpointslices"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["multicluster.x-k8s.io"]
-    resources: ["serviceexports"]
-    verbs: ["get", "list", "watch", "create", "delete"]
-  - apiGroups: ["multicluster.x-k8s.io"]
-    resources: ["serviceimports"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["apps"]
-    resources: ["replicasets"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["authentication.k8s.io"]
-    resources: ["tokenreviews"]
-    verbs: ["create"]
-  - apiGroups: ["authorization.k8s.io"]
-    resources: ["subjectaccessreviews"]
-    verbs: ["create"]
+- apiGroups:
+  - config.istio.io
+  - security.istio.io
+  - networking.istio.io
+  - authentication.istio.io
+  - rbac.istio.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - endpoints
+  - pods
+  - services
+  - nodes
+  - replicationcontrollers
+  - namespaces
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - networking.istio.io
+  resources:
+  - workloadentries
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - networking.x-k8s.io
+  - gateway.networking.k8s.io
+  resources:
+  - gateways
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - multicluster.x-k8s.io
+  resources:
+  - serviceexports
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+- apiGroups:
+  - multicluster.x-k8s.io
+  resources:
+  - serviceimports
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - replicasets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  labels:
+    app: istiod
+    release: istio
   name: istiod-clusterrole-{{ .Values.revision }}-istio-system
-  labels:
-    app: istiod
-    release: istio
 rules:
-  # sidecar injection controller
-  - apiGroups: ["admissionregistration.k8s.io"]
-    resources: ["mutatingwebhookconfigurations"]
-    verbs: ["get", "list", "watch", "update", "patch"]
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - validatingwebhookconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+- apiGroups:
+  - config.istio.io
+  - security.istio.io
+  - networking.istio.io
+  - authentication.istio.io
+  - rbac.istio.io
+  - telemetry.istio.io
+  - extensions.istio.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - networking.istio.io
+  resources:
+  - workloadentries
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+  - patch
+  - create
+  - delete
+- apiGroups:
+  - networking.istio.io
+  resources:
+  - workloadentries/status
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+  - patch
+  - create
+  - delete
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - nodes
+  - services
+  - namespaces
+  - endpoints
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  - ingressclasses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses/status
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+- apiGroups:
+  - networking.x-k8s.io
+  - gateway.networking.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - networking.x-k8s.io
+  - gateway.networking.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - update
+  - patch
+- apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - gatewayclasses
+  verbs:
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - multicluster.x-k8s.io
+  resources:
+  - serviceexports
+  verbs:
+  - get
+  - watch
+  - list
+  - create
+  - delete
+- apiGroups:
+  - multicluster.x-k8s.io
+  resources:
+  - serviceimports
+  verbs:
+  - get
+  - watch
+  - list
 
-  # configuration validation webhook controller
-  - apiGroups: ["admissionregistration.k8s.io"]
-    resources: ["validatingwebhookconfigurations"]
-    verbs: ["get", "list", "watch", "update"]
-
-  # istio configuration
-  # removing CRD permissions can break older versions of Istio running alongside this control plane (https://github.com/istio/istio/issues/29382)
-  # please proceed with caution
-  - apiGroups: ["config.istio.io", "security.istio.io", "networking.istio.io", "authentication.istio.io", "rbac.istio.io", "telemetry.istio.io", "extensions.istio.io"]
-    verbs: ["get", "watch", "list"]
-    resources: ["*"]
-  - apiGroups: ["networking.istio.io"]
-    verbs: [ "get", "watch", "list", "update", "patch", "create", "delete" ]
-    resources: [ "workloadentries" ]
-  - apiGroups: ["networking.istio.io"]
-    verbs: [ "get", "watch", "list", "update", "patch", "create", "delete" ]
-    resources: [ "workloadentries/status" ]
-
-  # auto-detect installed CRD definitions
-  - apiGroups: ["apiextensions.k8s.io"]
-    resources: ["customresourcedefinitions"]
-    verbs: ["get", "list", "watch"]
-
-  # discovery and routing
-  - apiGroups: [""]
-    resources: ["pods", "nodes", "services", "namespaces", "endpoints"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["discovery.k8s.io"]
-    resources: ["endpointslices"]
-    verbs: ["get", "list", "watch"]
-
-  # ingress controller
-  - apiGroups: ["networking.k8s.io"]
-    resources: ["ingresses", "ingressclasses"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["networking.k8s.io"]
-    resources: ["ingresses/status"]
-    verbs: ["*"]
-
-  # required for CA's namespace controller
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["create", "get", "list", "watch", "update"]
-
-  # Istiod and bootstrap.
-
-  # Used by Istiod to verify the JWT tokens
-  - apiGroups: ["authentication.k8s.io"]
-    resources: ["tokenreviews"]
-    verbs: ["create"]
-
-  # Used by Istiod to verify gateway SDS
-  - apiGroups: ["authorization.k8s.io"]
-    resources: ["subjectaccessreviews"]
-    verbs: ["create"]
-
-  # Use for Kubernetes Service APIs
-  - apiGroups: ["networking.x-k8s.io", "gateway.networking.k8s.io"]
-    resources: ["*"]
-    verbs: ["get", "watch", "list"]
-  - apiGroups: ["networking.x-k8s.io", "gateway.networking.k8s.io"]
-    resources: ["*"] # TODO: should be on just */status but wildcard is not supported
-    verbs: ["update", "patch"]
-  - apiGroups: ["gateway.networking.k8s.io"]
-    resources: ["gatewayclasses"]
-    verbs: ["create", "update", "patch", "delete"]
-
-  # Needed for multicluster secret reading, possibly ingress certs in the future
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["get", "watch", "list"]
-
-  # Used for MCS serviceexport management
-  - apiGroups: ["multicluster.x-k8s.io"]
-    resources: ["serviceexports"]
-    verbs: [ "get", "watch", "list", "create", "delete"]
-
-  # Used for MCS serviceimport management
-  - apiGroups: ["multicluster.x-k8s.io"]
-    resources: ["serviceimports"]
-    verbs: ["get", "watch", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: istiod-gateway-controller-{{ .Values.revision }}-istio-system
   labels:
     app: istiod
     release: istio
+  name: istiod-gateway-controller-{{ .Values.revision }}-istio-system
 rules:
-  - apiGroups: ["apps"]
-    verbs: [ "get", "watch", "list", "update", "patch", "create", "delete" ]
-    resources: [ "deployments" ]
-  - apiGroups: [""]
-    verbs: [ "get", "watch", "list", "update", "patch", "create", "delete" ]
-    resources: [ "services" ]
-  - apiGroups: [""]
-    verbs: [ "get", "watch", "list", "update", "patch", "create", "delete" ]
-    resources: [ "serviceaccounts"]
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+  - patch
+  - create
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+  - patch
+  - create
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+  - patch
+  - create
+  - delete
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: istio-reader-clusterrole-{{ .Values.revision }}-istio-system
   labels:
     app: istio-reader
     release: istio
+  name: istio-reader-clusterrole-{{ .Values.revision }}-istio-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: istio-reader-clusterrole-{{ .Values.revision }}-istio-system
 subjects:
-  - kind: ServiceAccount
-    name: istio-reader-service-account
-    namespace: istio-system
+- kind: ServiceAccount
+  name: istio-reader-service-account
+  namespace: istio-system
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: istiod-clusterrole-{{ .Values.revision }}-istio-system
   labels:
     app: istiod
     release: istio
+  name: istiod-clusterrole-{{ .Values.revision }}-istio-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: istiod-clusterrole-{{ .Values.revision }}-istio-system
 subjects:
-  - kind: ServiceAccount
-    name: istiod-{{ .Values.revision }}
-    namespace: istio-system
+- kind: ServiceAccount
+  name: istiod-{{ .Values.revision }}
+  namespace: istio-system
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: istiod-gateway-controller-{{ .Values.revision }}-istio-system
   labels:
     app: istiod
     release: istio
+  name: istiod-gateway-controller-{{ .Values.revision }}-istio-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -211,68 +394,52 @@ subjects:
 - kind: ServiceAccount
   name: istiod-{{ .Values.revision }}
   namespace: istio-system
+
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: istio-validator-{{ .Values.revision }}-istio-system
   labels:
     app: istiod
-    release: istio
     istio: istiod
     istio.io/rev: {{ .Values.revision }}
+    release: istio
+  name: istio-validator-{{ .Values.revision }}-istio-system
 webhooks:
-  # Webhook handling per-revision validation. Mostly here so we can determine whether webhooks
-  # are rejecting invalid configs on a per-revision basis.
-  - name: rev.validation.istio.io
-    clientConfig:
-      # Should change from base but cannot for API compat
-      service:
-        name: istiod-{{ .Values.revision }}
-        namespace: istio-system
-        path: "/validate"
-    rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
-          - security.istio.io
-          - networking.istio.io
-          - telemetry.istio.io
-          - extensions.istio.io
-        apiVersions:
-          - "*"
-        resources:
-          - "*"
-    # Fail open until the validation webhook is ready. The webhook controller
-    # will update this to `Fail` and patch in the `caBundle` when the webhook
-    # endpoint is ready.
-    failurePolicy: Ignore
-    sideEffects: None
-    admissionReviewVersions: ["v1beta1", "v1"]
-    objectSelector:
-      matchExpressions:
-        - key: istio.io/rev
-          operator: In
-          values:
-          - "{{ .Values.revision }}"
+- admissionReviewVersions:
+  - v1beta1
+  - v1
+  clientConfig:
+    service:
+      name: istiod-{{ .Values.revision }}
+      namespace: istio-system
+      path: /validate
+  failurePolicy: Ignore
+  name: rev.validation.istio.io
+  objectSelector:
+    matchExpressions:
+    - key: istio.io/rev
+      operator: In
+      values:
+      - {{ .Values.revision }}
+  rules:
+  - apiGroups:
+    - security.istio.io
+    - networking.istio.io
+    - telemetry.istio.io
+    - extensions.istio.io
+    apiVersions:
+    - '*'
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - '*'
+  sideEffects: None
+
 ---
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: istio-{{ .Values.revision }}
-  namespace: istio-system
-  labels:
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Pilot"
-    release: istio
 data:
-
-  # Configuration file for the mesh networks to be used by the Split Horizon EDS.
-  meshNetworks: |-
-    networks: {}
-
   mesh: |-
     accessLogEncoding: JSON
     accessLogFile: /dev/stdout
@@ -292,19 +459,22 @@ data:
     enablePrometheusMerge: true
     rootNamespace: istio-system
     trustDomain: {{ .Values.trustDomain }}
----
-apiVersion: v1
+  meshNetworks: 'networks: {}'
 kind: ConfigMap
 metadata:
-  name: istio-sidecar-injector-{{ .Values.revision }}
-  namespace: istio-system
   labels:
-    istio.io/rev: {{ .Values.revision }}
     install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Pilot"
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Pilot
     release: istio
-data:
+  name: istio-{{ .Values.revision }}
+  namespace: istio-system
 
+---
+apiVersion: v1
+data:
+  config: |-
+    {{- .Files.Get "files/istio-sidecar-injector.raw" | nindent 4 }}
   values: |-
     {
       "global": {
@@ -393,7 +563,7 @@ data:
         "sts": {
           "servicePort": 0
         },
-        "tag": "1.18.2",
+        "tag": "1.19.6",
         "tracer": {
           "datadog": {},
           "lightstep": {},
@@ -404,6 +574,7 @@ data:
         "variant": ""
       },
       "istio_cni": {
+        "chained": true,
         "enabled": true
       },
       "revision": "{{ .Values.revision }}",
@@ -413,51 +584,50 @@ data:
         "enableNamespacesByDefault": false,
         "injectedAnnotations": {},
         "neverInjectSelector": [],
+        "reinvocationPolicy": "Never",
         "rewriteAppHTTPProbe": true,
         "templates": {}
       }
     }
+kind: ConfigMap
+metadata:
+  labels:
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Pilot
+    release: istio
+  name: istio-sidecar-injector-{{ .Values.revision }}
+  namespace: istio-system
 
-  # To disable injection: use omitSidecarInjectorConfigMap, which disables the webhook patching
-  # and istiod webhook functionality.
-  #
-  # New fields should not use Values - it is a 'primary' config object, users should be able
-  # to fine tune it or use it with kube-inject.
-  config: |-
-    {{- .Files.Get "files/istio-sidecar-injector.raw" | nindent 4 }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: istio-sidecar-injector-{{ .Values.revision }}
   labels:
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Pilot"
     app: sidecar-injector
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Pilot
     release: istio
+  name: istio-sidecar-injector-{{ .Values.revision }}
 webhooks:
-- name: rev.namespace.sidecar-injector.istio.io
+- admissionReviewVersions:
+  - v1beta1
+  - v1
   clientConfig:
     service:
       name: istiod-{{ .Values.revision }}
       namespace: istio-system
-      path: "/inject"
+      path: /inject
       port: 443
-  sideEffects: None
-  rules:
-  - operations: [ "CREATE" ]
-    apiGroups: [""]
-    apiVersions: ["v1"]
-    resources: ["pods"]
   failurePolicy: Fail
-  admissionReviewVersions: ["v1beta1", "v1"]
+  name: rev.namespace.sidecar-injector.istio.io
   namespaceSelector:
     matchExpressions:
     - key: istio.io/rev
       operator: In
       values:
-      - "{{ .Values.revision }}"
+      - {{ .Values.revision }}
     - key: istio-injection
       operator: DoesNotExist
   objectSelector:
@@ -466,21 +636,28 @@ webhooks:
       operator: NotIn
       values:
       - "false"
-- name: rev.object.sidecar-injector.istio.io
+  reinvocationPolicy: Never
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+  sideEffects: None
+- admissionReviewVersions:
+  - v1beta1
+  - v1
   clientConfig:
     service:
       name: istiod-{{ .Values.revision }}
       namespace: istio-system
-      path: "/inject"
+      path: /inject
       port: 443
-  sideEffects: None
-  rules:
-  - operations: [ "CREATE" ]
-    apiGroups: [""]
-    apiVersions: ["v1"]
-    resources: ["pods"]
   failurePolicy: Fail
-  admissionReviewVersions: ["v1beta1", "v1"]
+  name: rev.object.sidecar-injector.istio.io
   namespaceSelector:
     matchExpressions:
     - key: istio.io/rev
@@ -496,7 +673,19 @@ webhooks:
     - key: istio.io/rev
       operator: In
       values:
-      - "{{ .Values.revision }}"
+      - {{ .Values.revision }}
+  reinvocationPolicy: Never
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+  sideEffects: None
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -579,10 +768,6 @@ spec:
           value: "true"
         - name: PILOT_TRACE_SAMPLING
           value: "1"
-        - name: PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_OUTBOUND
-          value: "true"
-        - name: PILOT_ENABLE_PROTOCOL_SNIFFING_FOR_INBOUND
-          value: "true"
         - name: ISTIOD_ADDR
           value: istiod-{{ .Values.revision }}.istio-system.svc:15012
         - name: PILOT_ENABLE_ANALYSIS
@@ -593,7 +778,13 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.memory
-        image: docker.io/istio/pilot:1.18.2
+        - name: GOMAXPROCS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        - name: PLATFORM
+          value: ""
+        image: docker.io/istio/pilot:1.19.6
         name: discovery
         ports:
         - containerPort: 8080
@@ -609,6 +800,10 @@ spec:
           initialDelaySeconds: 1
           periodSeconds: 3
           timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: 500m
+            memory: 2048Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -667,97 +862,118 @@ spec:
           name: istio-ca-root-cert
           optional: true
         name: istio-csr-ca-configmap
+
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: istiod-{{ .Values.revision }}
-  namespace: istio-system
   labels:
     app: istiod
-    istio.io/rev: {{ .Values.revision }}
     install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Pilot"
-    release: istio
     istio: pilot
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Pilot
+    release: istio
+  name: istiod-{{ .Values.revision }}
+  namespace: istio-system
 spec:
   minAvailable: 1
   selector:
     matchLabels:
       app: istiod
       istio.io/rev: {{ .Values.revision }}
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: istiod-{{ .Values.revision }}
-  namespace: istio-system
   labels:
     app: istiod
     release: istio
+  name: istiod-{{ .Values.revision }}
+  namespace: istio-system
 rules:
-- apiGroups: ["networking.istio.io"]
-  verbs: ["create"]
-  resources: ["gateways"]
+- apiGroups:
+  - networking.istio.io
+  resources:
+  - gateways
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - get
+  - watch
+  - list
+  - update
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - delete
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - update
+  - patch
+  - create
 
-- apiGroups: [""]
-  resources: ["secrets"]
-  # TODO lock this down to istio-ca-cert if not using the DNS cert mesh config
-  verbs: ["create", "get", "watch", "list", "update", "delete"]
-
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["delete"]
-
-- apiGroups: ["coordination.k8s.io"]
-  resources: ["leases"]
-  verbs: ["get", "update", "patch", "create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: istiod-{{ .Values.revision }}
-  namespace: istio-system
   labels:
     app: istiod
     release: istio
+  name: istiod-{{ .Values.revision }}
+  namespace: istio-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: istiod-{{ .Values.revision }}
 subjects:
-  - kind: ServiceAccount
-    name: istiod-{{ .Values.revision }}
-    namespace: istio-system
+- kind: ServiceAccount
+  name: istiod-{{ .Values.revision }}
+  namespace: istio-system
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app: istiod
+    install.operator.istio.io/owning-resource: unknown
+    istio: pilot
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: Pilot
+    release: istio
   name: istiod-{{ .Values.revision }}
   namespace: istio-system
-  labels:
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "Pilot"
-    app: istiod
-    istio: pilot
-    release: istio
 spec:
   ports:
-    - port: 15010
-      name: grpc-xds # plaintext
-      protocol: TCP
-    - port: 15012
-      name: https-dns # mTLS with k8s-signed cert
-      protocol: TCP
-    - port: 443
-      name: https-webhook # validation and injection
-      targetPort: 15017
-      protocol: TCP
-    - port: 15014
-      name: http-monitoring # prometheus stats
-      protocol: TCP
+  - name: grpc-xds
+    port: 15010
+    protocol: TCP
+  - name: https-dns
+    port: 15012
+    protocol: TCP
+  - name: https-webhook
+    port: 443
+    protocol: TCP
+    targetPort: 15017
+  - name: http-monitoring
+    port: 15014
+    protocol: TCP
   selector:
     app: istiod
     istio.io/rev: {{ .Values.revision }}
+
 ---

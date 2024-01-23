@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: istio-ingressgateway-service-account
-  namespace: istio-system
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
     install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "IngressGateways"
+    istio: ingressgateway
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: IngressGateways
+    release: istio
+  name: istio-ingressgateway-service-account
+  namespace: istio-system
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -80,6 +81,13 @@ spec:
         - containerPort: 15090
           name: http-envoy-prom
           protocol: TCP
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -109,51 +117,59 @@ spec:
         secret:
           optional: true
           secretName: istio-ingressgateway-ca-certs
+
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: istio-ingressgateway
-  namespace: istio-system
   labels:
     app: istio-ingressgateway
-    istio: ingressgateway
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
     install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "IngressGateways"
+    istio: ingressgateway
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: IngressGateways
+    release: istio
+  name: istio-ingressgateway
+  namespace: istio-system
 spec:
   minAvailable: 1
   selector:
     matchLabels:
       app: istio-ingressgateway
       istio: ingressgateway
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
+  labels:
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: IngressGateways
+    release: istio
   name: istio-ingressgateway-sds
   namespace: istio-system
-  labels:
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "IngressGateways"
 rules:
-- apiGroups: [""]
-  resources: ["secrets"]
-  verbs: ["get", "watch", "list"]
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - watch
+  - list
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
+  labels:
+    install.operator.istio.io/owning-resource: unknown
+    istio.io/rev: {{ .Values.revision }}
+    operator.istio.io/component: IngressGateways
+    release: istio
   name: istio-ingressgateway-sds
   namespace: istio-system
-  labels:
-    release: istio
-    istio.io/rev: {{ .Values.revision }}
-    install.operator.istio.io/owning-resource: unknown
-    operator.istio.io/component: "IngressGateways"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -161,6 +177,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: istio-ingressgateway-service-account
+
 ---
 apiVersion: v1
 kind: Service
@@ -197,4 +214,5 @@ spec:
     app: istio-ingressgateway
     istio: ingressgateway
   type: LoadBalancer
+
 ---
