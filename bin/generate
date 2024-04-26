@@ -47,9 +47,8 @@ generate "${VERSION}" EastWestGateway > charts/ewgw/templates/generated.yaml
 
 # Copy the revision-tags.yaml file from the upstream istiod chart
 helm pull istio/istiod --version "${VERSION//-/.}" --untar --untardir /tmp/xxx
-cp /tmp/xxx/istiod/templates/revision-tags.yaml charts/tags/templates/generated.yaml
-cp /tmp/xxx/istiod/templates/zzz_profile.yaml charts/tags/templates/zzz_profile.yaml
-cp /tmp/xxx/istiod/values.yaml charts/tags/values.yaml
+cp /tmp/xxx/istiod/templates/{revision-tags.yaml,zzz_profile.yaml} charts/tags/templates/
+cp /tmp/xxx/istiod/values.yaml charts/tags/
 rm -rf /tmp/xxx
 
 #------------------------------------------------------------------------------
@@ -61,6 +60,7 @@ yq -i ".revision=\"${VERSION}\"" charts/cni/values.yaml
 yq -i ".revision=\"${VERSION}\"" charts/ewgw/values.yaml
 yq -i ".revision=\"${VERSION}\"" charts/igws/values.yaml
 yq -i ".revision=\"${VERSION}\"" charts/pilot/values.yaml
+yq -i ".defaults.revision=\"${VERSION}\"" charts/tags/values.yaml
 
 #------------------------------------------------------------------------------
 # Extract the side-car injector config from the pilot generated yaml
