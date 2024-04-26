@@ -1,7 +1,7 @@
 # istio
 
-#### Upgrade to Istio `1.19.6`
-- Make sure `istioctl-1-19-6` is in the `PATH`.
-- Edit `values.yaml` and set `revision: 1-19-6`.
+#### Upgrade to Istio `1.21.2`
+- Make sure `istioctl-1-21-2` is in the `PATH`.
+- Edit `values.yaml` and set `revision: 1-21-2`.
 - Run `./bin/generate`.
 

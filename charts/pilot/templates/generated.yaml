@@ -484,7 +484,6 @@ data:
         "certSigners": [],
         "configCluster": false,
         "configValidation": true,
-        "defaultNodeSelector": {},
         "defaultPodDisruptionBudget": {
           "enabled": true
         },
@@ -535,9 +534,9 @@ data:
           "includeOutboundPorts": "",
           "logLevel": "warning",
           "privileged": true,
-          "readinessFailureThreshold": 30,
-          "readinessInitialDelaySeconds": 1,
-          "readinessPeriodSeconds": 2,
+          "readinessFailureThreshold": 4,
+          "readinessInitialDelaySeconds": 0,
+          "readinessPeriodSeconds": 15,
           "resources": {
             "limits": {
               "cpu": "2000m",
@@ -547,6 +546,10 @@ data:
               "cpu": "100m",
               "memory": "128Mi"
             }
+          },
+          "startupProbe": {
+            "enabled": true,
+            "failureThreshold": 600
           },
           "statusPort": 15020,
           "tracer": "zipkin"
@@ -563,14 +566,7 @@ data:
         "sts": {
           "servicePort": 0
         },
-        "tag": "1.19.6",
-        "tracer": {
-          "datadog": {},
-          "lightstep": {},
-          "stackdriver": {},
-          "zipkin": {}
-        },
-        "useMCP": false,
+        "tag": "1.21.2",
         "variant": ""
       },
       "istio_cni": {
@@ -768,8 +764,6 @@ spec:
           value: "true"
         - name: PILOT_TRACE_SAMPLING
           value: "1"
-        - name: ISTIOD_ADDR
-          value: istiod-{{ .Values.revision }}.istio-system.svc:15012
         - name: PILOT_ENABLE_ANALYSIS
           value: "false"
         - name: CLUSTER_ID
@@ -784,7 +778,7 @@ spec:
               resource: limits.cpu
         - name: PLATFORM
           value: ""
-        image: docker.io/istio/pilot:1.19.6
+        image: docker.io/istio/pilot:1.21.2
         name: discovery
         ports:
         - containerPort: 8080
@@ -810,9 +804,7 @@ spec:
             drop:
             - ALL
           readOnlyRootFilesystem: true
-          runAsGroup: 1337
           runAsNonRoot: true
-          runAsUser: 1337
         volumeMounts:
         - mountPath: /var/run/secrets/tokens
           name: istio-token
@@ -831,8 +823,6 @@ spec:
         - mountPath: /var/run/secrets/istiod/ca
           name: istio-csr-ca-configmap
           readOnly: true
-      securityContext:
-        fsGroup: 1337
       serviceAccountName: istiod-{{ .Values.revision }}
       volumes:
       - emptyDir:
