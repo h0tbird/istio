@@ -46,6 +46,16 @@ generate "${VERSION}" IngressGateways > charts/igws/templates/generated.yaml
 generate "${VERSION}" EastWestGateway > charts/ewgw/templates/generated.yaml
 
 #------------------------------------------------------------------------------
+# Set the revision in the values.yaml of the components
+#------------------------------------------------------------------------------
+
+yq -i ".revision=\"${VERSION}\"" charts/base/values.yaml
+yq -i ".revision=\"${VERSION}\"" charts/cni/values.yaml
+yq -i ".revision=\"${VERSION}\"" charts/ewgw/values.yaml
+yq -i ".revision=\"${VERSION}\"" charts/igws/values.yaml
+yq -i ".revision=\"${VERSION}\"" charts/pilot/values.yaml
+
+#------------------------------------------------------------------------------
 # Extract the side-car injector config from the pilot generated yaml
 # and save it in a separate file because it contains a template and
 # helm gets confused if it is in the same file and it is not escaped.
