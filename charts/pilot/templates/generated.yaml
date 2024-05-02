@@ -756,6 +756,8 @@ spec:
           value: /var/run/secrets/remote/config
         - name: AUTO_RELOAD_PLUGIN_CERTS
           value: "true"
+        - name: ENABLE_NATIVE_SIDECARS
+          value: "true"
         - name: ISTIOD_CUSTOM_HOST
           value: istiod.{{ .Values.cluster }}
         - name: PILOT_ENABLE_WORKLOAD_ENTRY_AUTOREGISTRATION
