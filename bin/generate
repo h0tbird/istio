@@ -46,6 +46,7 @@ generate "${VERSION}" IngressGateways > charts/igws/templates/generated.yaml
 generate "${VERSION}" EastWestGateway > charts/ewgw/templates/generated.yaml
 
 # Copy the revision-tags.yaml file from the upstream istiod chart
+helm repo update
 helm pull istio/istiod --version "${VERSION//-/.}" --untar --untardir /tmp/xxx
 cp /tmp/xxx/istiod/templates/{revision-tags.yaml,zzz_profile.yaml} charts/tags/templates/
 cp /tmp/xxx/istiod/values.yaml charts/tags/

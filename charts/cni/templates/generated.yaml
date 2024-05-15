@@ -139,12 +139,12 @@ spec:
   template:
     metadata:
       annotations:
-        ambient.istio.io/redirection: disabled
         prometheus.io/path: /metrics
         prometheus.io/port: "15014"
         prometheus.io/scrape: "true"
         sidecar.istio.io/inject: "false"
       labels:
+        istio.io/dataplane-mode: none
         k8s-app: istio-cni-node
         sidecar.istio.io/inject: "false"
     spec:
@@ -201,7 +201,7 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
-        image: docker.io/istio/install-cni:1.21.2
+        image: docker.io/istio/install-cni:1.22.0
         imagePullPolicy: IfNotPresent
         name: install-cni
         readinessProbe:
@@ -213,6 +213,13 @@ spec:
             cpu: 100m
             memory: 100Mi
         securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            - SYS_ADMIN
+            drop:
+            - ALL
           privileged: true
           runAsGroup: 0
           runAsNonRoot: false
