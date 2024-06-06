@@ -3,4 +3,4 @@ name: istio-tags
 description: Istio Tags
 type: application
 version: 0.1.0
-appVersion: "1.22.0"
+appVersion: "1.22.1"
