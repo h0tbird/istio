@@ -201,7 +201,7 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
-        image: docker.io/istio/install-cni:1.22.0
+        image: docker.io/istio/install-cni:1.22.1
         imagePullPolicy: IfNotPresent
         name: install-cni
         readinessProbe:

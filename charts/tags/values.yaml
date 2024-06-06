@@ -156,7 +156,7 @@ defaults:
       stackdriver:
         enabled: false
   # Revision is set as 'version' label and part of the resource names when installing multiple control planes.
-  revision: "1-22-0"
+  revision: "1-22-1"
   # Revision tags are aliases to Istio control plane revisions
   revisionTags: []
   # For Helm compatibility.
@@ -197,7 +197,7 @@ defaults:
     # Dev builds from prow are on gcr.io
     hub: docker.io/istio
     # Default tag for Istio images.
-    tag: 1.22.0
+    tag: 1.22.1
     # Variant of the image to use.
     # Currently supported are: [debug, distroless]
     variant: ""
