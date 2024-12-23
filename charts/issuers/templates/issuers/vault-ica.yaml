@@ -9,7 +9,7 @@ metadata:
 spec:
   vault:
     path: mesh/root/sign-intermediate
-    server: http://vault.demo.lab:82
+    server: http://vault.demo.lab
     auth:
       appRole:
         path: approle
